@@ -19,4 +19,4 @@ In addition, this project will include:
 * Instructions on how to play the game
 
 ## Wireframes
-![Wireframe](https://wireframe.cc/VdQnSH)
+![Wireframe](https://cdn.discordapp.com/attachments/747021191067205682/895781707268104252/Screenshot_116.png)
