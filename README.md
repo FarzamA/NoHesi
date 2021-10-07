@@ -46,6 +46,7 @@ In addition, this project will include:
 
 ### Tuesday 
 * Implement a scoring system
+* Get score to appear on screen
 * Start working on splash screen if time permits
 
 ### Wednesday
