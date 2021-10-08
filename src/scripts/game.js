@@ -5,6 +5,8 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 // Game class to hold all game logic
 class Game {
     constructor() {
+        // allow for devloping environment
+        this.useHelpers = true;
         // Grab our canvas element from index.html
         this.canvas = document.querySelector("#game");
 
@@ -39,5 +41,22 @@ class Game {
         const material = new THREE.MeshPhongMaterial( { color: 0x00aaff })
 
         const light = 
+    }
+
+    //constructor function handling too much logic so I put a lot of it into
+    // an initialization method
+    init() {
+        // const that = this; 
+
+        this.scene = new THREE.Scene();
+        this.camera = new THREE.PrespectiveCamera( 75, wind)
+        
+    }
+
+    // will have an animate function to actually render and animate everything
+    // this function is equivelant to our game loop
+
+    animate() {
+
     }
 }
