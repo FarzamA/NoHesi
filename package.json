@@ -28,6 +28,7 @@
     "babel-loader": "^8.2.2",
     "core-js": "^3.18.2",
     "css-loader": "^6.3.0",
+    "fflate": "^0.7.1",
     "mini-css-extract-plugin": "^2.4.2",
     "regenerator-runtime": "^0.13.9",
     "sass": "^1.42.1",

@@ -1,4 +1,4 @@
-const Game = require("../src/scripts/game");
+import Game from "./scripts/game"
 
 document.addEventListener('DOMContentLoaded', () => {
     console.log('DOM fully loaded and parsed');

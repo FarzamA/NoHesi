@@ -1,9 +1,8 @@
-const THREE = require('three');
-// // Added for developer purposes not intending to keep
-// import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
+// Added for developer purposes not intending to keep
+import THREE from "../../node_modules/three/build/three"
+import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
+import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
 
-// // in order to attempt to load a figure
-// import { FBXLoader } from 'three/examples/jsm/loaders/FBXLoader';
 
 // Game class to hold all game logic
 class Game {
@@ -25,7 +24,10 @@ class Game {
         const canvas = document.querySelector("#game");
 
         // Create renderer to render and handle our scene
-        this.renderer = new THREE.WebGL1Renderer();
+        this.renderer = new THREE.WebGLRenderer({
+            canvas, 
+            alpha: true
+        });
         this.renderer.setSize( window.innerWidth, window.innerHeight );
         document.body.appendChild( this.renderer.domElement ); 
 
@@ -36,16 +38,17 @@ class Game {
         const ambient = new THREE.AmbientLight( 0x707070 );
 
         // So I can view and move around the plane while I work
-        this.controls = new THREE.OrbitControls(this.camera);
+        this.controls = new OrbitControls( this.camera, this.renderer.domElement );
 
         this.scene.add( light, ambient ); 
 
-        //Choosing to utilize FBXLoader to work with assets
-        const loader = new THREE.FBXLoader();
+        //Choosing to utilize GLTFLoader to work with assets
+        const loader = new GLTFLoader();
 
         // takes in a destination url for assets, what to do on the load, what to do during the load
         // and what to do if there is an error
-        loader.load("", function(objects) {
+        loader.load("/src/assets/musclepack.fbx", function(objects) {
+            // ran into a dependancy issue said that you need fflate 
             const cars = objects.array;
             that.playerCar = object[0];
             that.scene.add( playerCar ); 
@@ -64,7 +67,7 @@ class Game {
                 that.animate();
 
         }, null, function(error) {
-            console.log(error);
+            console.error(error);
         });
         
     }
@@ -84,4 +87,4 @@ class Game {
     };
 };
 
-module.exports = Game;
+export default Game;
