@@ -2,54 +2,66 @@ const THREE = require('three');
 // Added for developer purposes not intending to keep
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 
+// in order to attempt to load a figure
+import { FBXLoader } from 'three/examples/jsm/loaders/FBXLoader';
+
 // Game class to hold all game logic
 class Game {
     constructor() {
-        // allow for devloping environment
-        this.useHelpers = true;
-        // Grab our canvas element from index.html
-        this.canvas = document.querySelector("#game");
-
-        // Instantiate scene
-        this.scene = new THREE.Scene(); 
-
-        // Create a camera, might need multiple later for splash screen
-        // Prespective Camera so that everything that is further away looks smaller
-        this.camera = new THREE.PrespectiveCamera( 75, window.innerWidth/window.innerHeight, 1, 1000 );
-
-        // Pass in our canvas we initially grabbed so our game can be rendered on the canvas tag
-        // Also allows us to style the canvas will utilize later to create skybox
-        this.renderer = new THREE.WebGLRenderer({
-            canvas, 
-            alpha: true
-        });
-
-        // Set the size of the render I will be keeping everything in one scene so this works perfectly
-        this.renderer.setSize( window.innerWidth, window.innerHeight );
-
-        // this way things don't look too distored
-        this.renderer.setPixelRatio( window.devicePixelRatio );
-
-        document.body.appendChild( this.renderer.domElement );
-
-        //adding this for now(developer purposes so I can look around while building)
-        const controls = new OrbitControls( camera, this.renderer.domElement );
-
-        const geometry = new THREE.BoxGeometry( 1, 1, 1 );
-        // Phong material insead of lambert or basic for reflectiveness
-        // 0x stands for a hexadecimal character
-        const material = new THREE.MeshPhongMaterial( { color: 0x00aaff })
-
-        const light = 
+        this.init();
     }
 
     //constructor function handling too much logic so I put a lot of it into
     // an initialization method
     init() {
-        // const that = this; 
+        const that = this; 
 
+        // Create scene and camera to be rendered later
         this.scene = new THREE.Scene();
-        this.camera = new THREE.PrespectiveCamera( 75, wind)
+        this.camera = new THREE.PrespectiveCamera( 75, window.innerWidth/window.innerHeight, 1, 1000 );
+        this.camera.position.set(1, 1, 5); 
+
+        // Create renderer to render and handle our scene
+        this.renderer = new THREE.WebGL1Renderer();
+        this.renderer.setSize( window.innerWidth, window.innerHeight );
+        document.body.appendChild( this.renderer.domElement ); 
+
+        // Create lighting for more reflictive and ambient effect
+        const light = new THREE.DirectionalLight(0xffffff);
+        light.position.set(0, 20, 10); 
+        // Create soft ambient lighting
+        const ambient = new THREE.AmbientLight( 0x707070 );
+
+        // So I can view and move around the plane while I work
+        this.controls = new THREE.OrbitControls(this.camera);
+
+        this.scene.add( light, ambient ); 
+
+        //Choosing to utilize FBXLoader to work with assets
+        const loader = new THREE.FBXLoader();
+
+        // takes in a destination url for assets, what to do on the load, what to do during the load
+        // and what to do if there is an error
+        loader.load("", function(object) {
+            that.playerCar = object;
+            that.scene.add(object); 
+            // might need to update or set controls for the actual car here 
+
+            // add shadows to everything that is related to the car
+            object.traverse( function(child) {
+                // make sure to only add shadows to meshes
+                if (child.isMesh){
+                    child.castShadow = true; 
+                    child.recieveShadow = true;
+                };
+            });
+
+            // animate the whole game once the actual file we are loading has loaded
+            that.animate();
+
+        }, null, function(error) {
+            console.log(error);
+        });
         
     }
 
@@ -57,6 +69,13 @@ class Game {
     // this function is equivelant to our game loop
 
     animate() {
+        const that = this; 
 
-    }
+        //needs to be passed in this way otherwise it won't work 
+        requestAnimationFrame( function() { that.animate(); } );
+
+        this.controls.update();
+
+        this.renderer.render ( this.scene, this.camera );
+    };
 }
