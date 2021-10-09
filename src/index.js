@@ -17,6 +17,7 @@ document.addEventListener('DOMContentLoaded', () => {
         g.camera.updateProjectionMatrix();
         g.renderer.setSize(window.innerWidth, window.innerHeight); 
         // not sure why but this throws an error if I do g.renderer.render()
+        // nvm no it doesn't it fixes everything
         g.renderer.render();
     }
 

@@ -1,9 +1,10 @@
 // Added for developer purposes not intending to keep
 import * as THREE from "three"
-import Stats from 'three/examples/jsm/libs/stats.module';
+import Stats from "three/examples/jsm/libs/stats.module";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 import { PointerLockControls } from "three/examples/jsm/controls/PointerLockControls";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
+import Skybox from "./skybox";
 
 
 // Game class to hold all game logic
@@ -11,19 +12,21 @@ class Game {
     // create scene with inital controls
     constructor() {
         this.init();
-        this.lights();
-        this.plane();
+        this.skybox = new Skybox(1100, 1100, 1100, 'retrosun');
+        // this.lights();
+        // this.plane();
         // this.loadAssets();
-
+        this.scene.add( this.skybox.box );
+        
         this.setupControls();
     }
     
     //initialization method needs to be more compartamentalized --- BREAK THIS DOWN
     init() {
-        const that = this; 
-        
         // Create scene and camera to be rendered later
         this.scene = new THREE.Scene();
+        // Set the background of the scene
+        // this.scene.background = new THREE.Color(0, 0, 0)
         // dev purposes
         this.scene.add( new THREE.AxesHelper(5) );
         this.camera = new THREE.PerspectiveCamera( 75, window.innerWidth/window.innerHeight, 0.1, 1000 );
@@ -33,41 +36,44 @@ class Game {
         
         // Grab the things we need from index.html
         const canvas = document.querySelector("#game");
-
+        
         // Create renderer to render and handle our scene
         this.renderer = new THREE.WebGLRenderer({
-            canvas
+            canvas,
+            alpha: true
         });
         this.renderer.setSize( window.innerWidth, window.innerHeight );
         document.body.appendChild( this.renderer.domElement ); 
-
+        
         // Adding fps/ms/other resource tracker 
         this.stats = Stats(); 
         document.body.appendChild(this.stats.dom)
     };
 
+    
     // Create lighting
     lights() {
         const light = new THREE.DirectionalLight(0xffffff);
         const ambient = new THREE.AmbientLight( 0x707070 );
         light.position.set(0, 20, 10); 
-
-        this.scene.add( light, ambient ); 
-    }
-
+        
+        // this.scene.add( ambient ); 
+    };
+    
     // Create a basic plane
     plane() {
         // making a plane for the game to be staged on 
-        const geometry = new THREE.PlaneGeometry(100, 100, 50, 50); 
+        const geometry = new THREE.BoxGeometry(100, 50, 25); 
 
         // threejs comes with mad materials explore these for materials of your car, also takes a color as an option
-        const material = new THREE.MeshBasicMaterial( { color: 0x00ff00, wireframe: true } );
+        const material = new THREE.MeshBasicMaterial( { color: 0x00ff00, wireframe: true, side: THREE.DoubleSide } );
 
         // to make the actual plane you create a mesh passing in the geometry and the material 
         // a mesh like a mesh between the two
         const plane = new THREE.Mesh( geometry, material );
+        plane.position.set(0, 0, 0);
 
-        this.scene.add( plane );
+        // this.scene.add( plane );
     }
 
     setupControls() {
