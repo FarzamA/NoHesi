@@ -28,7 +28,8 @@ class Game {
         this.scene.add( new THREE.AxesHelper(5) );
         this.camera = new THREE.PerspectiveCamera( 75, window.innerWidth/window.innerHeight, 0.1, 1000 );
         // adjust height to make it seem like head height
-        this.camera.position.set(0, 1, 2); 
+        this.camera.position.y = 1; 
+        this.camera.position.z = 2; 
         
         // Grab the things we need from index.html
         const canvas = document.querySelector("#game");
@@ -79,14 +80,33 @@ class Game {
             controls.lock();
         }, false);
         
-        console.log(this);
-        console.log("-----------");
 
         // need this in order to be able to focus in and out of start menu 
         controls.addEventListener('lock', function() {
             menu.style.display = 'none';
         }); 
         controls.addEventListener('unlock', () => (menu.style.display = 'block'));
+
+        // make keyboard controls for pointer locked splash screen \
+        // event returns the **KEYCODE**
+        const onKeyDown = function(event) {
+            switch(event.code) {
+                case "KeyW":
+                    controls.moveForward(0.25);
+                    break; 
+                case "KeyA":
+                    controls.moveRight(-0.25);
+                    break;
+                case "KeyS":
+                    controls.moveForward(-0.25);
+                    break;
+                case "KeyD":
+                    controls.moveRight(0.25);
+                    break;
+            };
+        };
+
+        document.addEventListener('keydown', onKeyDown, false);
     }
 
     //Choosing to utilize GLTFLoader to work with assets
