@@ -1,9 +1,11 @@
-// Added for developer purposes not intending to keep
 import * as THREE from "three"
 import Stats from "three/examples/jsm/libs/stats.module";
+// Added for developer purposes not intending to keep
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 import { PointerLockControls } from "three/examples/jsm/controls/PointerLockControls";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
+import { FontLoader } from "three/examples/jsm/loaders/FontLoader";
+import { TextGeometry } from "three/examples/jsm/geometries/TextGeometry";
 import Skybox from "./skybox";
 
 
@@ -16,6 +18,7 @@ class Game {
         this.lights();
         this.plane();
         this.loadAssets();
+        this.rayCast();
 
         this.road();
         
@@ -33,8 +36,7 @@ class Game {
         this.scene.add( new THREE.AxesHelper(5) );
         this.camera = new THREE.PerspectiveCamera( 75, window.innerWidth/window.innerHeight, 0.1, 1000 );
         // adjust height to make it seem like head height
-        this.camera.position.y = 3; 
-        this.camera.position.z = 2; 
+        this.camera.position.set(-1, 3, 1)
 
         //rotating initial camera to start off facing the sunset might change later
         this.camera.rotateY(-Math.PI);
@@ -57,15 +59,44 @@ class Game {
 
     
     // Create lighting
+    // Lighting is necessary to bounce off of any loaded models
     lights() {
-        const light = new THREE.DirectionalLight(0xffffff, 3);
+        const light = new THREE.DirectionalLight(0xffffff, 3.0);
+
+        this.spotLight = new THREE.SpotLight(0xffa95c, 10);
+        this.spotLight.castShadow = true;
+
+
         const helper = new THREE.DirectionalLightHelper( light, 5 );
-        // const ambient = new THREE.AmbientLight( 0x707070 );
-        light.position.set(2, 10, 5); 
+        const ambient = new THREE.AmbientLight( 0x707070, 0.6 );
+        light.rotateX(-Math.PI * 0.5);
+        light.position.set(2, 1, 0); 
+
+        const hemi = new THREE.HemisphereLight(0xffeeb1, 0x80820, 4)
         
-        this.scene.add( light, helper ); 
+        this.scene.add( this.spotLight, hemi, light, helper, ambient ); 
     };
+
     
+    //Raycasting for selection of specific objects
+    rayCast() {
+        const that = this;
+
+        this.raycaster = new THREE.Raycaster();
+        this.mouse = new THREE.Vector2();
+
+
+        // calculate mouse position in normalized device coordinates
+	    // (-1 to +1) for both components
+        function onMouseMove( event ) {
+            that.mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
+            that.mouse.y = -( event.clientY / window.innerWidth ) * 2 + 1;
+        };
+
+        document.addEventListener( 'mousemove', onMouseMove, false );
+    };
+
+
     // Create a basic plane
     plane() {
         // making a plane for the game to be staged on 
@@ -108,6 +139,9 @@ class Game {
     }
 
     setupControls() {
+
+        const that = this;
+
         const menu = document.querySelector("#menu");
         const startButton = document.querySelector("#start-button");
         
@@ -155,9 +189,10 @@ class Game {
         // and what to do if there is an error
         loader.load("./src/assets/scene.gltf", function(gltf) {
             // ran into a dependancy issue said that you need fflate 
-            console.log(gltf);
+            // console.log(gltf);
             that.playerCar = gltf.scene;
-            that.playerCar.position.set(2, 1.0, 5);
+            that.playerCar.position.set(2, 1, 5);
+            // that.playerCar.userData = { URL: "http://google.com" }
             // might need to update or set controls for the actual car here 
             
             // add shadows to everything that is related to the car
@@ -173,7 +208,9 @@ class Game {
             //that.animate();
             that.scene.add( that.playerCar ); 
                 
-            }, function(load) {
+            },
+            // for testing purposes change this back to null later
+            function(load) {
                 console.log((load.loaded/load.total * 100) + "% Loaded");
             }, function(error) {
                 console.error(error);
@@ -187,12 +224,74 @@ class Game {
         const that = this; 
 
         //needs to be passed in this way otherwise it won't work 
-        requestAnimationFrame( function() { that.animate(); } );
+        requestAnimationFrame( function() { that.animate() } );
 
         // this.controls.update();
+        if (this.playerCar) {
+            this.render();
+        };
 
         this.renderer.render ( this.scene, this.camera );
+
+
+        // this attatches a light to your camera position and moves it as
+        // you move in order to shine a light on everything you look at
+        this.spotLight.position.set(
+            this.camera.position.x + 2, 
+            this.camera.position.y + 2, 
+            this.camera.position.z + 2
+        );
+
+        
     };
+
+
+    render() {
+        this.raycaster.setFromCamera( this.mouse, this.camera )
+
+        // debugger
+        const intersects = this.raycaster.intersectObjects( this.playerCar.children );
+
+        // console.log(intersects);
+
+        if (intersects.length > 0) {
+            console.log(intersects);
+            this.playerCar.getObjectByName("Muscle_car_2Body_Stripes_0").addEventListener('click', this.createText.bind(this), false);
+            // window.open(intersects[0].object.userData.URL);
+        };
+
+        this.renderer.render( this.scene, this.camera );
+    };
+
+    createText() {
+        console.log('clicked');
+        const loader = new FontLoader(); 
+        let geometry;
+
+        loader.load('./src/assets/fonts/pixel.json', function ( font ) {
+            geometry = new TextGeometry('TEST', {
+                font: font, 
+                size: 80, 
+                height: 5
+            });
+        },  function(load) {
+            console.log((load.loaded/load.total * 100) + "% Loaded");
+        });
+
+
+        
+
+        const materials = [
+            new THREE.MeshPhongMaterial( { color: 0xffffff, flatShading: true }), //sets the front
+            new THREE.MeshPhongMaterial( { color: 0xffffff }) // sets the side
+        ];
+
+        const text = new THREE.Mesh( geometry, materials );
+
+        text.position.set(2, 2, 2);
+
+        this.scene.add( text );
+    }
 };
 
 export default Game;

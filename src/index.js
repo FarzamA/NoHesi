@@ -18,7 +18,6 @@ document.addEventListener('DOMContentLoaded', () => {
         g.renderer.setSize(window.innerWidth, window.innerHeight); 
         g.animate();
     };
-
     
 });
 
