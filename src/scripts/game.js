@@ -35,7 +35,7 @@ class Game {
         // Set the background of the scene
         // this.scene.background = new THREE.Color(0, 0, 0)
         // dev purposes
-        this.scene.add( new THREE.AxesHelper(5) );
+        // this.scene.add( new THREE.AxesHelper(5) );
         this.camera = new THREE.PerspectiveCamera( 75, window.innerWidth/window.innerHeight, 0.1, 1000 );
         // adjust height to make it seem like head height
         this.camera.position.set(-1, 2.5, 1)
@@ -214,7 +214,7 @@ class Game {
         const time = this.clock.getElapsedTime();
 
         if (this.textMesh) {
-            // this.textMesh.rotation.y += 0.001;
+            this.textMesh.rotation.y += 0.001;
             this.update(time);
         };
 
@@ -238,7 +238,8 @@ class Game {
     };
 
     update( time ) {
-        this.textMesh.position.y += (Math.cos(time) * 0.001);
+        this.textMesh.position.y += (Math.sin(time) * 0.001);
+
     }
 
      //Raycasting for selection of specific objects
@@ -263,19 +264,30 @@ class Game {
     render() {
         this.raycaster.setFromCamera( this.mouse, this.camera )
 
-        const intersects = this.raycaster.intersectObjects( [this.playerCar] );
+        const intersects = this.raycaster.intersectObjects( this.scene.children );
         
         // debugger
         // console.log(intersects);
-
-        if (intersects.length > 0 && this.playerCar.children.includes(intersects[0].object.parent.parent.parent.parent) ) {
-            console.log('cast');
-            if (!this.textMesh) {
-                this.createText();
-            }
-            // console.log(this.playerCar.children.includes(intersects[0].object.parent.parent.parent.parent))
-            // window.open(intersects[0].object.userData.URL);
-        };
+        if (intersects.length > 0) {
+            if ( (intersects[0].object.parent.parent) && (this.playerCar.children.includes(intersects[0].object.parent.parent.parent.parent)) ) {
+                // && this.playerCar.children.includes(intersects[0].object.parent.parent.parent.parent)
+                // console.log(intersects);
+                // console.log(intersects[0].object.parent.parent.parent.parent);
+                // console.log(this.playerCar);
+                // console.log(this.playerCar.children);
+                // console.log(this.playerCar.children.includes(intersects[0].object.parent.parent.parent.parent));
+                if (!this.textMesh) {
+                    this.createText();
+                }
+                // console.log(this.playerCar.children.includes(intersects[0].object.parent.parent.parent.parent))
+                // window.open(intersects[0].object.userData.URL);
+            } else {
+                // console.log(intersects[0].object);
+                if (this.textMesh === intersects[0].object) {
+                    console.log('found the text');
+                }
+            };
+        }
 
         this.renderer.render( this.scene, this.camera );
     };
@@ -303,12 +315,12 @@ class Game {
             that.textMesh = new THREE.Mesh( geometry, materials );
 
             // that.textMesh.position.set(0.25, 2.2, 0.85);
-            that.textMesh.position.set((that.camera.position.x + 0.75) , that.camera.position.y, (that.camera.position.z));
+            that.textMesh.position.set((that.playerCar.position.x - 0.3) , (that.playerCar.position.y + 1.5), (that.playerCar.position.z + 1.0));
             
             // that.textMesh.position.y += 5.0;
             // that.textMesh.position.x -= 0.30;
             // that.textMesh.position.z += 0.85;
-            that.textMesh.rotateY(-Math.PI * 0.5);
+            // that.textMesh.rotateY(-Math.PI * 0.5);
             // debugger
             that.scene.add( that.textMesh );
             
