@@ -18,7 +18,7 @@ class Game {
         this.lights();
         this.plane();
         this.loadAssets();
-        this.rayCast();
+        // this.rayCast();
 
         this.road();
         
@@ -36,7 +36,7 @@ class Game {
         this.scene.add( new THREE.AxesHelper(5) );
         this.camera = new THREE.PerspectiveCamera( 75, window.innerWidth/window.innerHeight, 0.1, 1000 );
         // adjust height to make it seem like head height
-        this.camera.position.set(-1, 3, 1)
+        this.camera.position.set(-1, 2.5, 1)
 
         //rotating initial camera to start off facing the sunset might change later
         this.camera.rotateY(-Math.PI);
@@ -50,7 +50,9 @@ class Game {
             alpha: true
         });
         this.renderer.setSize( window.innerWidth, window.innerHeight );
-        document.body.appendChild( this.renderer.domElement ); 
+        document.body.appendChild( this.renderer.domElement )
+        
+        this.renderer.domElement.addEventListener('click', this.rayCast.bind(this), false); 
         
         // Adding fps/ms/other resource tracker 
         this.stats = Stats(); 
@@ -76,26 +78,6 @@ class Game {
         
         this.scene.add( this.spotLight, hemi, light, helper, ambient ); 
     };
-
-    
-    //Raycasting for selection of specific objects
-    rayCast() {
-        const that = this;
-
-        this.raycaster = new THREE.Raycaster();
-        this.mouse = new THREE.Vector2();
-
-
-        // calculate mouse position in normalized device coordinates
-	    // (-1 to +1) for both components
-        function onMouseMove( event ) {
-            that.mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
-            that.mouse.y = -( event.clientY / window.innerWidth ) * 2 + 1;
-        };
-
-        document.addEventListener( 'mousemove', onMouseMove, false );
-    };
-
 
     // Create a basic plane
     plane() {
@@ -191,7 +173,8 @@ class Game {
             // ran into a dependancy issue said that you need fflate 
             // console.log(gltf);
             that.playerCar = gltf.scene;
-            that.playerCar.position.set(2, 1, 5);
+            that.playerCar.recieveShadow = true;
+            that.playerCar.position.set(0, 0.3, 0);
             // that.playerCar.userData = { URL: "http://google.com" }
             // might need to update or set controls for the actual car here 
             
@@ -227,9 +210,9 @@ class Game {
         requestAnimationFrame( function() { that.animate() } );
 
         // this.controls.update();
-        if (this.playerCar) {
-            this.render();
-        };
+        // if (this.playerCar) {
+        //     this.render();
+        // };
 
         this.renderer.render ( this.scene, this.camera );
 
@@ -245,18 +228,37 @@ class Game {
         
     };
 
+     //Raycasting for selection of specific objects
+     rayCast( event ) {
+        this.raycaster = new THREE.Raycaster();
+        this.mouse = new THREE.Vector2();
+
+
+        // calculate mouse position in normalized device coordinates
+	    // (-1 to +1) for both components
+        // function onMouseMove( event ) {
+            this.mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
+            this.mouse.y = -( event.clientY / window.innerWidth ) * 2 + 1;
+        // };
+
+        this.render();
+
+        // document.addEventListener( 'mousemove', onMouseMove, false );
+    };
+
 
     render() {
         this.raycaster.setFromCamera( this.mouse, this.camera )
 
+        const intersects = this.raycaster.intersectObjects( [this.playerCar] );
+        
         // debugger
-        const intersects = this.raycaster.intersectObjects( this.playerCar.children );
-
         // console.log(intersects);
 
-        if (intersects.length > 0) {
-            console.log(intersects);
-            this.playerCar.getObjectByName("Muscle_car_2Body_Stripes_0").addEventListener('click', this.createText.bind(this), false);
+        if (intersects.length > 0 && this.playerCar.children.includes(intersects[0].object.parent.parent.parent.parent) ) {
+            console.log('cast');
+            this.createText();
+            // console.log(this.playerCar.children.includes(intersects[0].object.parent.parent.parent.parent))
             // window.open(intersects[0].object.userData.URL);
         };
 
@@ -266,31 +268,36 @@ class Game {
     createText() {
         console.log('clicked');
         const loader = new FontLoader(); 
-        let geometry;
+        const that = this;
 
         loader.load('./src/assets/fonts/pixel.json', function ( font ) {
-            geometry = new TextGeometry('TEST', {
+            const geometry = new TextGeometry('DRIVE', {
                 font: font, 
-                size: 80, 
-                height: 5
+                size: 0.30, 
+                height: 0.08
             });
+
+            const materials = [
+                new THREE.MeshPhongMaterial( { color: 0xffffff, flatShading: true }), //sets the front
+                new THREE.MeshPhongMaterial( { color: 0xffffff }) // sets the side
+            ];
+
+            const textMesh = new THREE.Mesh( geometry, materials );
+            
+            textMesh.position.y += 2.1;
+            textMesh.position.x -= 0.5;
+            textMesh.position.z += 1.0;
+            textMesh.rotateY(-Math.PI * 0.5);
+            // debugger
+            that.scene.add( textMesh );
+            
+
         },  function(load) {
             console.log((load.loaded/load.total * 100) + "% Loaded");
         });
 
+        // debugger
 
-        
-
-        const materials = [
-            new THREE.MeshPhongMaterial( { color: 0xffffff, flatShading: true }), //sets the front
-            new THREE.MeshPhongMaterial( { color: 0xffffff }) // sets the side
-        ];
-
-        const text = new THREE.Mesh( geometry, materials );
-
-        text.position.set(2, 2, 2);
-
-        this.scene.add( text );
     }
 };
 
