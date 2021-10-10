@@ -209,6 +209,10 @@ class Game {
         //needs to be passed in this way otherwise it won't work 
         requestAnimationFrame( function() { that.animate() } );
 
+        if (this.textMesh) {
+            this.textMesh.rotation.y += 0.001;
+        };
+
         // this.controls.update();
         // if (this.playerCar) {
         //     this.render();
@@ -273,23 +277,26 @@ class Game {
         loader.load('./src/assets/fonts/pixel.json', function ( font ) {
             const geometry = new TextGeometry('DRIVE', {
                 font: font, 
-                size: 0.30, 
+                size: 0.4, 
                 height: 0.08
             });
 
+            const color1 = new THREE.Color("rgb(91, 17, 140)");
+            const color2 = new THREE.Color("rgb(20, 20, 102)");
+
             const materials = [
-                new THREE.MeshPhongMaterial( { color: 0xffffff, flatShading: true }), //sets the front
-                new THREE.MeshPhongMaterial( { color: 0xffffff }) // sets the side
+                new THREE.MeshPhongMaterial( { color: color1, flatShading: true }), //sets the front
+                new THREE.MeshPhongMaterial( { color: color2 }) // sets the side
             ];
 
-            const textMesh = new THREE.Mesh( geometry, materials );
+            that.textMesh = new THREE.Mesh( geometry, materials );
             
-            textMesh.position.y += 2.1;
-            textMesh.position.x -= 0.5;
-            textMesh.position.z += 1.0;
-            textMesh.rotateY(-Math.PI * 0.5);
+            that.textMesh.position.y += 2.1;
+            that.textMesh.position.x -= 0.30;
+            that.textMesh.position.z += 0.85;
+            that.textMesh.rotateY(-Math.PI * 0.5);
             // debugger
-            that.scene.add( textMesh );
+            that.scene.add( that.textMesh );
             
 
         },  function(load) {
