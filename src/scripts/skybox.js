@@ -6,18 +6,10 @@ import * as THREE from "three";
 
 class Skybox {
     constructor(width, height, depth, filename) {
-        // Without this we error out in the console saying that our skybox is not 
-        // actually a 3d object
-        // this.sky = new THREE.Group();
         this.geometry = new THREE.BoxGeometry(width, height, depth);
         const material = this.createMaterials(filename);
 
-        // console.log(material);
         this.box = new THREE.Mesh( this.geometry, material );
-
-        // this.sky.add(this.box)
-
-        
     }
 
     createMaterials(filename) {
@@ -28,6 +20,7 @@ class Skybox {
             // console.log(image);
 
             //instead of returning hte texture we just want to return a mesh that's made of basic material
+            // with our texture files mapped to it
             return new THREE.MeshBasicMaterial({ map: texture, side: THREE.BackSide });
         })
 
@@ -37,13 +30,12 @@ class Skybox {
     }
 
     loadPaths(filename) {
-        const base = `./src/assets/skybox/${filename}/`;
-        const basePath = base + filename;
-        // choosing png because this is easy
+        const base = `./src/assets/skybox/${filename}/${filename}`;
+        // choosing png because this is how my assets are
         const type = ".png";
         const sides = ['ft','bk', 'up', 'dn', 'rt', 'lf'];
         const finalPaths = sides.map(side => {
-            return basePath + "_" + side + type;
+            return base + "_" + side + type;
         })
 
         return finalPaths
