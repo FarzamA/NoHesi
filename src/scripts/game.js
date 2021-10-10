@@ -20,6 +20,8 @@ class Game {
         this.loadAssets();
         // this.rayCast();
 
+        this.clock = new THREE.Clock();
+
         this.road();
         
         this.setupControls();
@@ -174,7 +176,7 @@ class Game {
             // console.log(gltf);
             that.playerCar = gltf.scene;
             that.playerCar.recieveShadow = true;
-            that.playerCar.position.set(0, 0.3, 0);
+            that.playerCar.position.set(0.3, 0.3, 0);
             // that.playerCar.userData = { URL: "http://google.com" }
             // might need to update or set controls for the actual car here 
             
@@ -209,8 +211,11 @@ class Game {
         //needs to be passed in this way otherwise it won't work 
         requestAnimationFrame( function() { that.animate() } );
 
+        const time = this.clock.getElapsedTime();
+
         if (this.textMesh) {
-            this.textMesh.rotation.y += 0.001;
+            // this.textMesh.rotation.y += 0.001;
+            this.update(time);
         };
 
         // this.controls.update();
@@ -231,6 +236,10 @@ class Game {
 
         
     };
+
+    update( time ) {
+        this.textMesh.position.y += (Math.cos(time) * 0.001);
+    }
 
      //Raycasting for selection of specific objects
      rayCast( event ) {
@@ -261,7 +270,9 @@ class Game {
 
         if (intersects.length > 0 && this.playerCar.children.includes(intersects[0].object.parent.parent.parent.parent) ) {
             console.log('cast');
-            this.createText();
+            if (!this.textMesh) {
+                this.createText();
+            }
             // console.log(this.playerCar.children.includes(intersects[0].object.parent.parent.parent.parent))
             // window.open(intersects[0].object.userData.URL);
         };
@@ -290,10 +301,13 @@ class Game {
             ];
 
             that.textMesh = new THREE.Mesh( geometry, materials );
+
+            // that.textMesh.position.set(0.25, 2.2, 0.85);
+            that.textMesh.position.set((that.camera.position.x + 0.75) , that.camera.position.y, (that.camera.position.z));
             
-            that.textMesh.position.y += 2.1;
-            that.textMesh.position.x -= 0.30;
-            that.textMesh.position.z += 0.85;
+            // that.textMesh.position.y += 5.0;
+            // that.textMesh.position.x -= 0.30;
+            // that.textMesh.position.z += 0.85;
             that.textMesh.rotateY(-Math.PI * 0.5);
             // debugger
             that.scene.add( that.textMesh );
