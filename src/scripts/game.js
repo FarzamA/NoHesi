@@ -42,6 +42,12 @@ class Game {
 
         //rotating initial camera to start off facing the sunset might change later
         this.camera.rotateY(-Math.PI);
+
+        this.cameraController = new THREE.Object3D();
+        this.cameraController.add( this.camera );
+        this.camerTarget = new THREE.Vector3(0, 0, 0);
+
+        this.scene.add( this.cameraController );
         
         // Grab the things we need from index.html
         const canvas = document.querySelector("#game");
@@ -78,7 +84,7 @@ class Game {
 
         const hemi = new THREE.HemisphereLight(0xffeeb1, 0x80820, 4)
         
-        this.scene.add( this.spotLight, hemi, light, helper, ambient ); 
+        this.scene.add( this.spotLight, hemi, light, ambient ); 
     };
 
     // Create a basic plane
@@ -214,7 +220,7 @@ class Game {
         const time = this.clock.getElapsedTime();
 
         if (this.textMesh) {
-            this.textMesh.rotation.y += 0.001;
+            // this.textMesh.rotation.y += 0.001;
             this.update(time);
         };
 
@@ -238,8 +244,7 @@ class Game {
     };
 
     update( time ) {
-        this.textMesh.position.y += (Math.sin(time) * 0.001);
-
+        this.textMesh.position.y += (Math.cos(time) * 0.001);
     }
 
      //Raycasting for selection of specific objects
@@ -247,17 +252,19 @@ class Game {
         this.raycaster = new THREE.Raycaster();
         this.mouse = new THREE.Vector2();
 
+        const that = this;
+
 
         // calculate mouse position in normalized device coordinates
 	    // (-1 to +1) for both components
-        // function onMouseMove( event ) {
-            this.mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
-            this.mouse.y = -( event.clientY / window.innerWidth ) * 2 + 1;
-        // };
+        function onMouseMove( event ) {
+            that.mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
+            that.mouse.y = -( event.clientY / window.innerWidth ) * 2 + 1;
+        };
 
         this.render();
 
-        // document.addEventListener( 'mousemove', onMouseMove, false );
+        this.renderer.domElement.addEventListener( 'mousemove', onMouseMove, false );
     };
 
 
@@ -269,6 +276,7 @@ class Game {
         // debugger
         // console.log(intersects);
         if (intersects.length > 0) {
+            // need to find a better way to deal w this bc console gets an error everytime you click something that doesn't have a parent
             if ( (intersects[0].object.parent.parent) && (this.playerCar.children.includes(intersects[0].object.parent.parent.parent.parent)) ) {
                 // && this.playerCar.children.includes(intersects[0].object.parent.parent.parent.parent)
                 // console.log(intersects);
@@ -281,16 +289,23 @@ class Game {
                 }
                 // console.log(this.playerCar.children.includes(intersects[0].object.parent.parent.parent.parent))
                 // window.open(intersects[0].object.userData.URL);
-            } else {
+            } else if (this.textMesh === intersects[0].object) {
                 // console.log(intersects[0].object);
-                if (this.textMesh === intersects[0].object) {
-                    console.log('found the text');
-                }
+                    this.updateCamera();
             };
         }
 
         this.renderer.render( this.scene, this.camera );
     };
+
+    updateCamera() {
+        // copy allows for u to take the properties of another camera and put them into the one called
+        this.cameraController.position.set(1, 2, -10);
+        // utilizing 0, 0, 0 bc that's where I placed the car 
+        this.camera.lookAt( this.camerTarget );
+        // the parent of the textmesh is the scene which where we want to get rid of it from after click
+        this.textMesh.removeFromParent();
+    }
 
     createText() {
         console.log('clicked');
@@ -300,7 +315,7 @@ class Game {
         loader.load('./src/assets/fonts/pixel.json', function ( font ) {
             const geometry = new TextGeometry('DRIVE', {
                 font: font, 
-                size: 0.4, 
+                size: 0.7, 
                 height: 0.08
             });
 
@@ -315,12 +330,12 @@ class Game {
             that.textMesh = new THREE.Mesh( geometry, materials );
 
             // that.textMesh.position.set(0.25, 2.2, 0.85);
-            that.textMesh.position.set((that.playerCar.position.x - 0.3) , (that.playerCar.position.y + 1.5), (that.playerCar.position.z + 1.0));
+            that.textMesh.position.set((that.playerCar.position.x - 0.5) , (that.playerCar.position.y + 1.5), (that.playerCar.position.z + 1.0));
             
             // that.textMesh.position.y += 5.0;
             // that.textMesh.position.x -= 0.30;
             // that.textMesh.position.z += 0.85;
-            // that.textMesh.rotateY(-Math.PI * 0.5);
+            that.textMesh.rotateY(-Math.PI * 0.5);
             // debugger
             that.scene.add( that.textMesh );
             
