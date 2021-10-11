@@ -287,6 +287,7 @@ class Game {
         };
 
         if (this.inGame) {
+            this.skybox.box.rotation.x += (Math.cos(time) * 0.0001);
             this.plane.rotation.y += 0.001;
             // debugger
             // if (that.pedCar.postion.z < -10) {
