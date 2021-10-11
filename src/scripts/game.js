@@ -1,4 +1,4 @@
-import * as THREE from "three"
+import * as THREE from "three";
 import Stats from "three/examples/jsm/libs/stats.module";
 // Added for developer purposes not intending to keep
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
@@ -7,6 +7,7 @@ import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
 import { FontLoader } from "three/examples/jsm/loaders/FontLoader";
 import { TextGeometry } from "three/examples/jsm/geometries/TextGeometry";
 import Skybox from "./skybox";
+import WorldObjects from "./world";
 
 
 // Game class to hold all game logic
@@ -14,7 +15,7 @@ class Game {
     // create scene with inital controls
     constructor() {
         this.init();
-        this.skybox = new Skybox(1100, 1100, 1100, 'retrosun');
+        this.skybox = new Skybox(1000, 1000, 1000, 'retrosun');
         this.lights();
         this.plane();
         this.loadAssets();
@@ -137,17 +138,17 @@ class Game {
         const startButton = document.querySelector("#start-button");
         
         
-        const controls = new PointerLockControls( this.camera, this.renderer.domElement );
+        this.controls = new PointerLockControls( this.camera, this.renderer.domElement );
         startButton.addEventListener("click", function() {
-            controls.lock();
+            that.controls.lock();
         }, false);
         
 
         // need this in order to be able to focus in and out of start menu 
-        controls.addEventListener('lock', function() {
+        this.controls.addEventListener('lock', function() {
             menu.style.display = 'none';
         }); 
-        controls.addEventListener('unlock', () => (menu.style.display = 'block'));
+        this.controls.addEventListener('unlock', () => (menu.style.display = 'block'));
 
         // make keyboard controls for pointer locked splash screen \
         // event returns the **KEYCODE**
@@ -155,7 +156,7 @@ class Game {
             switch(event.code) {
                 case "KeyW":
                     if (!that.inGame) {
-                        controls.moveForward(0.25);
+                        that.controls.moveForward(0.25);
                     } else {
                         if (that.playerCar.position.z < 5) {
                             that.playerCar.position.z += 0.5
@@ -164,7 +165,7 @@ class Game {
                     break; 
                 case "KeyA":
                     if (!that.inGame) {
-                        controls.moveRight(-0.25);
+                        that.controls.moveRight(-0.25);
                     } else {
                         if (that.playerCar.position.x < 10.5) {
                             that.playerCar.position.x += 0.5;
@@ -173,7 +174,7 @@ class Game {
                     break;
                 case "KeyS":
                     if (!that.inGame) {
-                        controls.moveForward(-0.25);
+                        that.controls.moveForward(-0.25);
                     } else {
                         if (that.playerCar.position.z > -5) {
                             that.playerCar.position.z -= 0.5
@@ -182,7 +183,7 @@ class Game {
                     break;
                 case "KeyD":
                     if (!that.inGame) {
-                        controls.moveRight(0.25);
+                        that.controls.moveRight(0.25);
                     } else {
                         if (that.playerCar.position.x > -10) {
                             that.playerCar.position.x -= 0.5
@@ -202,7 +203,7 @@ class Game {
         
         // takes in a destination url for assets, what to do on the load, what to do during the load
         // and what to do if there is an error
-        loader.load("./src/assets/scene.gltf", function(gltf) {
+        loader.load("./src/assets/car1/scene.gltf", function(gltf) {
             // ran into a dependancy issue said that you need fflate 
             // console.log(gltf);
             that.playerCar = gltf.scene;
@@ -218,6 +219,10 @@ class Game {
                     child.castShadow = true; 
                     child.recieveShadow = true;
                 };
+                //
+                if (child.geometry) {
+                    child.geometry.computeBoundingBox();
+                };
             });
                     
             // animate the whole game once the actual file we are loading has loaded
@@ -229,6 +234,32 @@ class Game {
             function(load) {
                 console.log((load.loaded/load.total * 100) + "% Loaded");
             }, function(error) {
+                console.error(error);
+            });
+
+            //loading ped car
+
+            loader.load("./src/assets/car2/scene.gltf", function(gltf) {
+                that.pedCar = gltf.scene; 
+                that.pedCar.recieveShadow = true; 
+                that.pedCar.position.set(0, 2, 0);
+    
+                that.pedCar.traverse( function(c) {
+                    if (c.isMesh) {
+                        c.castShadow = true; 
+                        c.recieveShadow = true; 
+                    };
+    
+                    if (c.geometry) {
+                        c.geometry.computeBoundingBox();
+                    };
+                })
+                
+            }, 
+            function(xhr) {
+                console.log((xhr.loaded/xhr.total * 100) + '% Loaded'); 
+            },
+            function(error) {
                 console.error(error);
             });
             
@@ -248,6 +279,10 @@ class Game {
             // this.textMesh.rotation.y += 0.001;
             this.update(time);
         };
+
+        if (this.inGame) {
+
+        }
 
         // this.controls.update();
         // if (this.playerCar) {
@@ -333,6 +368,7 @@ class Game {
 
         // making a variable to declare game start 
         this.inGame = true;
+        // this.controls.disconnect();
     }
 
     createText() {
