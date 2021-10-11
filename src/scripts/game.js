@@ -20,6 +20,7 @@ class Game {
         this.plane();
         this.loadAssets();
         // this.rayCast();
+        // this.lives = 2;
 
         this.clock = new THREE.Clock();
 
@@ -159,7 +160,7 @@ class Game {
                         that.controls.moveForward(0.25);
                     } else {
                         if (that.playerCar.position.z < 5) {
-                            that.playerCar.position.z += 0.5
+                            that.playerCar.position.z += 0.5;
                         };
                     };
                     break; 
@@ -177,7 +178,7 @@ class Game {
                         that.controls.moveForward(-0.25);
                     } else {
                         if (that.playerCar.position.z > -5) {
-                            that.playerCar.position.z -= 0.5
+                            that.playerCar.position.z -= 0.5;
                         }
                     };
                     break;
@@ -186,7 +187,7 @@ class Game {
                         that.controls.moveRight(0.25);
                     } else {
                         if (that.playerCar.position.x > -10) {
-                            that.playerCar.position.x -= 0.5
+                            that.playerCar.position.x -= 0.5;
                         }
                     };
                     break;
@@ -219,11 +220,18 @@ class Game {
                     child.castShadow = true; 
                     child.recieveShadow = true;
                 };
-                //
+
                 if (child.geometry) {
                     child.geometry.computeBoundingBox();
                 };
             });
+
+            // handling the bounding box logic 
+            that.playerBox = new THREE.Box3().setFromObject(that.playerCar);
+
+            console.log(that.playerBox);
+
+            // that.playerBox.setfromObject({object: that.playerCar});
                     
             // animate the whole game once the actual file we are loading has loaded
             //that.animate();
@@ -244,9 +252,11 @@ class Game {
                 that.pedCar.recieveShadow = true; 
                 that.pedCar.scale.set(0.015, 0.015, 0.015);
                 that.pedCar.position.set(0, 0.3, 300);
+
     
                 that.pedCar.traverse( function(c) {
                     if (c.isMesh) {
+                        // c.geometry.computeBoundingBox;
                         c.castShadow = true; 
                         c.recieveShadow = true; 
                     };
@@ -255,6 +265,12 @@ class Game {
                         c.geometry.computeBoundingBox();
                     };
                 });
+
+                // handling the bounding box logic 
+                that.pedBox = new THREE.Box3().setFromObject(that.pedCar);
+
+                console.log(that.pedBox);
+
 
                 that.scene.add( that.pedCar );
                 
@@ -285,22 +301,32 @@ class Game {
             // this.textMesh.rotation.y += 0.001;
             this.update(time);
         };
-
+        
         if (this.inGame) {
+            // this.playerCar.rotation.x += (Math.sin(time) * 0.0003);
+            // debugger
             this.skybox.box.rotation.x += (Math.cos(time) * 0.0001);
             this.plane.rotation.y += 0.001;
             // debugger
-            // if (that.pedCar.postion.z < -10) {
-            //     that.pedCar.positon.z = 300;
-            // } else {
+            if (this.pedCar.position.z < -10) {
+                this.pedCar.position.z = 300;
+            } else {
                 this.pedCar.position.z -= 0.25;
-            // };
+            };
+
+            this.updateColliders();
+            // console.log(this.pedBox);
+            if (this.pedBox.intersectsBox(this.playerBox)) {
+                
+                console.log('hit');
+            }
         }
 
         // this.controls.update();
         // if (this.playerCar) {
         //     this.render();
         // };
+
 
         this.renderer.render ( this.scene, this.camera );
 
@@ -312,9 +338,12 @@ class Game {
             this.camera.position.y + 2, 
             this.camera.position.z + 2
         );
-
-        
     };
+
+    updateColliders() {
+        this.playerBox.setFromObject(this.playerCar);
+        this.pedBox.setFromObject(this.pedCar);
+    }
 
     update( time ) {
         this.textMesh.position.y += (Math.cos(time) * 0.001);
