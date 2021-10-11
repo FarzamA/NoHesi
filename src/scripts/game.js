@@ -7,6 +7,7 @@ import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
 import { FontLoader } from "three/examples/jsm/loaders/FontLoader";
 import { TextGeometry } from "three/examples/jsm/geometries/TextGeometry";
 import Skybox from "./skybox";
+import PedCar from "./car";
 import WorldObjects from "./world";
 
 
@@ -14,19 +15,29 @@ import WorldObjects from "./world";
 class Game {
     // create scene with inital controls
     constructor() {
+        const that = this;
         this.init();
         this.skybox = new Skybox(1000, 1000, 1000, 'retrosun');
         this.lights();
         this.plane();
+        this.boxGeoms = [0, 1, 2, 3];
+        this.cars = [0, 1, 2, 3]
         this.loadAssets();
+        // this.cars = [];
+        // this.peds = new PedCar();
         // this.rayCast();
         // this.lives = 2;
+        console.log(this.boxGeoms);
+        // this.scene.add(this.peds.cars[0]);
+        // debugger
 
         this.clock = new THREE.Clock();
 
         this.road();
         
         this.setupControls();
+        // this.pedCars = [];
+        // this.pedCars.push(this.pedCar)
         this.scene.add( this.skybox.box );
         this.inGame = false;
     }
@@ -116,6 +127,7 @@ class Game {
     //thinking about maing this road into its own little class 
 
     road() {
+        // debugger
         const geometry = new THREE.PlaneGeometry(30, 1000, 100, 100);
 
         geometry.rotateX(-Math.PI * 0.5);
@@ -229,7 +241,7 @@ class Game {
             // handling the bounding box logic 
             that.playerBox = new THREE.Box3().setFromObject(that.playerCar);
 
-            console.log(that.playerBox);
+            // console.log(that.playerBox);
 
             // that.playerBox.setfromObject({object: that.playerCar});
                     
@@ -245,42 +257,82 @@ class Game {
                 console.error(error);
             });
 
+            for (let i = 0; i < 4;i++) {
+                // const that2 = that;
+                loader.load("./src/assets/cars/pedCar/scene.gltf", function(gltf) {
+                    const pedCar = gltf.scene; 
+                    pedCar.recieveShadow = true; 
+                    pedCar.scale.set(0.015, 0.015, 0.015);
+                    pedCar.position.set(i, 0.3, 300);
+    
+    
+                    pedCar.traverse( function(c) {
+                        if (c.isMesh) {
+                            // c.geometry.computeBoundingBox;
+                            c.castShadow = true; 
+                            c.recieveShadow = true; 
+                        };
+    
+                        if (c.geometry) {
+                            c.geometry.computeBoundingBox();
+                        };
+                    });
+    
+                    // handling the bounding box logic 
+                    const pedBox = new THREE.Box3().setFromObject(pedCar);
+    
+                    // console.log( pedBox );
+    
+                    that.boxGeoms[i] = pedBox
+                    that.cars[i] = pedCar
+    
+                    that.scene.add( pedCar );
+                    
+                }, 
+                function(xhr) {
+                    console.log((xhr.loaded/xhr.total * 100) + '% Loaded'); 
+                },
+                function(error) {
+                    console.error(error);
+                });
+            };
+
             //loading ped car
 
-            loader.load("./src/assets/cars/pedCar/scene.gltf", function(gltf) {
-                that.pedCar = gltf.scene; 
-                that.pedCar.recieveShadow = true; 
-                that.pedCar.scale.set(0.015, 0.015, 0.015);
-                that.pedCar.position.set(0, 0.3, 300);
+            // loader.load("./src/assets/cars/pedCar/scene.gltf", function(gltf) {
+            //     that.pedCar = gltf.scene; 
+            //     that.pedCar.recieveShadow = true; 
+            //     that.pedCar.scale.set(0.015, 0.015, 0.015);
+            //     that.pedCar.position.set(0, 0.3, 300);
 
     
-                that.pedCar.traverse( function(c) {
-                    if (c.isMesh) {
-                        // c.geometry.computeBoundingBox;
-                        c.castShadow = true; 
-                        c.recieveShadow = true; 
-                    };
+            //     that.pedCar.traverse( function(c) {
+            //         if (c.isMesh) {
+            //             // c.geometry.computeBoundingBox;
+            //             c.castShadow = true; 
+            //             c.recieveShadow = true; 
+            //         };
     
-                    if (c.geometry) {
-                        c.geometry.computeBoundingBox();
-                    };
-                });
+            //         if (c.geometry) {
+            //             c.geometry.computeBoundingBox();
+            //         };
+            //     });
 
-                // handling the bounding box logic 
-                that.pedBox = new THREE.Box3().setFromObject(that.pedCar);
+            //     // handling the bounding box logic 
+            //     that.pedBox = new THREE.Box3().setFromObject(that.pedCar);
 
-                console.log(that.pedBox);
+            //     console.log(that.pedBox);
 
 
-                that.scene.add( that.pedCar );
+            //     that.scene.add( that.pedCar );
                 
-            }, 
-            function(xhr) {
-                console.log((xhr.loaded/xhr.total * 100) + '% Loaded'); 
-            },
-            function(error) {
-                console.error(error);
-            });
+            // }, 
+            // function(xhr) {
+            //     console.log((xhr.loaded/xhr.total * 100) + '% Loaded'); 
+            // },
+            // function(error) {
+            //     console.error(error);
+            // });
             
     }
 
@@ -305,29 +357,44 @@ class Game {
         if (this.inGame) {
             // this.playerCar.rotation.x += (Math.sin(time) * 0.0003);
             // debugger
+            // this.skybox.box.rotation.z += 0.01;
             this.skybox.box.rotation.x += (Math.cos(time) * 0.0001);
             this.plane.rotation.y += 0.001;
             // debugger
-            if (this.pedCar.position.z < -10) {
-                // random number between a range in our case the range is the 
-                // width of the road
-                const min = Math.floor(-20);
-                const max = Math.floor(5);
-                const rando = Math.floor((Math.random() * (max - min) + min));
-                console.log(rando);
+            for (let i = 0; i < this.cars.length; i++) {
+                if (this.cars[i].position.z < -10) {
+                    const min = Math.floor(-20);
+                    const max = Math.floor(5);
+                    const rando = Math.floor((Math.random() * (max - min) + min));
 
-                this.pedCar.position.z = 300;
-                this.pedCar.position.x = rando;
-            } else {
-                this.pedCar.position.z -= 0.5;
-            };
+                    this.cars[i].position.z = 300; 
+                    this.cars[i].position.x = rando;
+                } else {
+                    this.cars[i].position.z -= 0.5;
+                }
+            }
+            // if (this.pedCar.position.z < -10) {
+            //     // random number between a range in our case the range is the 
+            //     // width of the road
+            //     const min = Math.floor(-20);
+            //     const max = Math.floor(5);
+            //     const rando = Math.floor((Math.random() * (max - min) + min));
+            //     console.log(rando);
+
+            //     this.pedCar.position.z = 300;
+            //     this.pedCar.position.x = rando;
+            // } else {
+            //     this.pedCar.position.z -= 0.5;
+            // };
 
             this.updateColliders();
             // console.log(this.pedBox);
-            if (this.pedBox.intersectsBox(this.playerBox)) {
-                
-                console.log('hit');
-            }
+            for (let i = 0; i < this.boxGeoms.length; i++) {
+                if (this.boxGeoms[i].intersectsBox(this.playerBox)) {
+                    
+                    console.log('hit');
+                }
+            };
         }
 
         // this.controls.update();
@@ -350,7 +417,16 @@ class Game {
 
     updateColliders() {
         this.playerBox.setFromObject(this.playerCar);
-        this.pedBox.setFromObject(this.pedCar);
+
+        for (let i = 0; i < this.boxGeoms.length; i++) {
+            this.boxGeoms[i].setFromObject(this.cars[i]);
+        };
+
+        // console.log(this.cars);
+        // this.boxGeoms.forEach((obj) => {
+        //     obj.boxGeoms.setFromObject(obj);
+        // });
+        // this.pedBox.setFromObject(this.pedCar);
     }
 
     update( time ) {
@@ -358,7 +434,7 @@ class Game {
     }
 
      //Raycasting for selection of specific objects
-     rayCast( event ) {
+    rayCast( event ) {
         this.raycaster = new THREE.Raycaster();
         this.mouse = new THREE.Vector2();
 
