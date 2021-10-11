@@ -277,6 +277,9 @@ class Game {
         requestAnimationFrame( function() { that.animate() } );
 
         const time = this.clock.getElapsedTime();
+        // remember to utilize time to keep track of score down the line
+        // will save trouble later
+        // console.log(time);
 
         if (this.textMesh) {
             // this.textMesh.rotation.y += 0.001;
@@ -284,7 +287,12 @@ class Game {
         };
 
         if (this.inGame) {
-            that.pedCar.position.z -= 0.25;
+            // debugger
+            // if (that.pedCar.postion.z < -10) {
+            //     that.pedCar.positon.z = 300;
+            // } else {
+                this.pedCar.position.z -= 0.25;
+            // };
         }
 
         // this.controls.update();
