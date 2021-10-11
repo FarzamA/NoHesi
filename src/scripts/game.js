@@ -186,7 +186,7 @@ class Game {
                     if (!that.inGame) {
                         that.controls.moveRight(0.25);
                     } else {
-                        if (that.playerCar.position.x > -10) {
+                        if (that.playerCar.position.x > -10.5) {
                             that.playerCar.position.x -= 0.5;
                         }
                     };
@@ -309,9 +309,17 @@ class Game {
             this.plane.rotation.y += 0.001;
             // debugger
             if (this.pedCar.position.z < -10) {
+                // random number between a range in our case the range is the 
+                // width of the road
+                const min = Math.floor(-20);
+                const max = Math.floor(5);
+                const rando = Math.floor((Math.random() * (max - min) + min));
+                console.log(rando);
+
                 this.pedCar.position.z = 300;
+                this.pedCar.position.x = rando;
             } else {
-                this.pedCar.position.z -= 0.25;
+                this.pedCar.position.z -= 0.5;
             };
 
             this.updateColliders();
