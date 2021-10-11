@@ -253,7 +253,9 @@ class Game {
                     if (c.geometry) {
                         c.geometry.computeBoundingBox();
                     };
-                })
+                });
+
+                that.scene.add( that.pedCar );
                 
             }, 
             function(xhr) {
