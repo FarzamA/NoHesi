@@ -106,10 +106,10 @@ class Game {
 
         // to make the actual plane you create a mesh passing in the geometry and the material 
         // a mesh like a mesh between the two
-        const plane = new THREE.Mesh( geometry, material );
-        plane.position.set(0, 0, 0);
+        this.plane = new THREE.Mesh( geometry, material );
+        this.plane.position.set(0, 0, 0);
 
-        this.scene.add( plane );
+        this.scene.add( this.plane );
     }
 
     //thinking about maing this road into its own little class 
@@ -287,6 +287,7 @@ class Game {
         };
 
         if (this.inGame) {
+            this.plane.rotation.y += 0.001;
             // debugger
             // if (that.pedCar.postion.z < -10) {
             //     that.pedCar.positon.z = 300;
