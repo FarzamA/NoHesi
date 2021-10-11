@@ -242,7 +242,8 @@ class Game {
             loader.load("./src/assets/car2/scene.gltf", function(gltf) {
                 that.pedCar = gltf.scene; 
                 that.pedCar.recieveShadow = true; 
-                that.pedCar.position.set(0, 2, 0);
+                that.pedCar.scale.set(0.015, 0.015, 0.015);
+                that.pedCar.position.set(0, 0.3, 0);
     
                 that.pedCar.traverse( function(c) {
                     if (c.isMesh) {
@@ -283,7 +284,7 @@ class Game {
         };
 
         if (this.inGame) {
-
+            that.pedCar.position.z += 0.5;
         }
 
         // this.controls.update();
