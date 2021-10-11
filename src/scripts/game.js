@@ -26,6 +26,7 @@ class Game {
         
         this.setupControls();
         this.scene.add( this.skybox.box );
+        this.inGame = false;
     }
     
     //initialization method needs to be more compartamentalized --- BREAK THIS DOWN
@@ -45,7 +46,7 @@ class Game {
 
         this.cameraController = new THREE.Object3D();
         this.cameraController.add( this.camera );
-        this.camerTarget = new THREE.Vector3(0, 0, 0);
+        this.cameraTarget = new THREE.Vector3(0, 0, 0);
 
         this.scene.add( this.cameraController );
         
@@ -153,16 +154,40 @@ class Game {
         const onKeyDown = function(event) {
             switch(event.code) {
                 case "KeyW":
-                    controls.moveForward(0.25);
+                    if (!that.inGame) {
+                        controls.moveForward(0.25);
+                    } else {
+                        if (that.playerCar.position.z < 5) {
+                            that.playerCar.position.z += 0.5
+                        };
+                    };
                     break; 
                 case "KeyA":
-                    controls.moveRight(-0.25);
+                    if (!that.inGame) {
+                        controls.moveRight(-0.25);
+                    } else {
+                        if (that.playerCar.position.x < 10.5) {
+                            that.playerCar.position.x += 0.5;
+                        };
+                    };
                     break;
                 case "KeyS":
-                    controls.moveForward(-0.25);
+                    if (!that.inGame) {
+                        controls.moveForward(-0.25);
+                    } else {
+                        if (that.playerCar.position.z > -5) {
+                            that.playerCar.position.z -= 0.5
+                        }
+                    };
                     break;
                 case "KeyD":
-                    controls.moveRight(0.25);
+                    if (!that.inGame) {
+                        controls.moveRight(0.25);
+                    } else {
+                        if (that.playerCar.position.x > -10) {
+                            that.playerCar.position.x -= 0.5
+                        }
+                    };
                     break;
             };
         };
@@ -302,9 +327,12 @@ class Game {
         // copy allows for u to take the properties of another camera and put them into the one called
         this.cameraController.position.set(1, 2, -10);
         // utilizing 0, 0, 0 bc that's where I placed the car 
-        this.camera.lookAt( this.camerTarget );
+        this.camera.lookAt( this.cameraTarget );
         // the parent of the textmesh is the scene which where we want to get rid of it from after click
         this.textMesh.removeFromParent();
+
+        // making a variable to declare game start 
+        this.inGame = true;
     }
 
     createText() {
