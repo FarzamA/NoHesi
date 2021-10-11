@@ -125,7 +125,7 @@ class Game {
 
         const road = new THREE.Mesh( geometry, material );
 
-        road.position.set(0, 0.3, 0);
+        road.position.set(-0.5, 0.3, 0);
 
         this.scene.add( road );
     }
@@ -203,7 +203,7 @@ class Game {
         
         // takes in a destination url for assets, what to do on the load, what to do during the load
         // and what to do if there is an error
-        loader.load("./src/assets/car1/scene.gltf", function(gltf) {
+        loader.load("./src/assets/cars/playerCar/scene.gltf", function(gltf) {
             // ran into a dependancy issue said that you need fflate 
             // console.log(gltf);
             that.playerCar = gltf.scene;
@@ -239,11 +239,11 @@ class Game {
 
             //loading ped car
 
-            loader.load("./src/assets/car2/scene.gltf", function(gltf) {
+            loader.load("./src/assets/cars/pedCar/scene.gltf", function(gltf) {
                 that.pedCar = gltf.scene; 
                 that.pedCar.recieveShadow = true; 
                 that.pedCar.scale.set(0.015, 0.015, 0.015);
-                that.pedCar.position.set(0, 0.3, 0);
+                that.pedCar.position.set(0, 0.3, 300);
     
                 that.pedCar.traverse( function(c) {
                     if (c.isMesh) {
@@ -284,7 +284,7 @@ class Game {
         };
 
         if (this.inGame) {
-            that.pedCar.position.z += 0.5;
+            that.pedCar.position.z -= 0.25;
         }
 
         // this.controls.update();
