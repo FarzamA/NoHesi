@@ -295,8 +295,8 @@ class Game {
             // this.playerCar.rotation.x += (Math.sin(time) * 0.0003);
             // debugger
             // this.skybox.box.rotation.z += 0.01;
-            this.skybox.box.rotation.x += (Math.cos(time) * 0.0001);
-            this.plane.rotation.y += 0.001;
+            this.skybox.box.rotation.x += (Math.cos(time) * 0.001);
+            this.plane.rotation.y += 0.01;
             // debugger
             for (let i = 0; i < this.peds.cars.length; i++) {
                 if (this.peds.cars[i].position.z < -10) {
@@ -311,7 +311,7 @@ class Game {
                     this.peds.cars[i].position.z = rando2; 
                     this.peds.cars[i].position.x = rando;
                 } else {
-                    this.peds.cars[i].position.z -= 0.25;
+                    this.peds.cars[i].position.z -= 1.0;
                 }
             }
 

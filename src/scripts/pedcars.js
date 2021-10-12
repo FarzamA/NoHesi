@@ -9,9 +9,6 @@ class PedCar {
         this.scene = scene;
         this.numCars = num;
         this.init();
-
-        // console.log(this.cars);
-        // console.log(this.boxGeoms);
     }
 
     init() {
