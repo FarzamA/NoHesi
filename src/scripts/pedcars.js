@@ -11,6 +11,20 @@ class PedCar {
         this.init();
     }
 
+    reset() {
+        for (let i = 0; i < this.cars.length; i++) {
+            const min = Math.floor(-20);
+            const max = Math.floor(5);
+            const rando = Math.floor((Math.random() * (max - min) + min));
+
+            const min2 = Math.floor(100);
+            const max2 = Math.floor(450);
+            const rando2 = Math.floor((Math.random() * (max2 - min2) + min2));
+            this.cars[i].position.set(rando, 0.3, rando2);
+            // this.boxGeoms[i].position.set(rando, 0.3, rando2);
+        }
+    }
+
     init() {
         const that = this;
         const loader = new GLTFLoader();

@@ -441,13 +441,14 @@ class Game {
             } else if (this.textMesh === intersects[0].object) {
                 // console.log(intersects[0].object);
                     this.updateCamera();
+                    // this.song.currentTime = 0;
                     this.inGame = true; 
                     this.gameOver = false; 
                     this.isPaused = false;
                     this.gameTimer.start();
 
                 // reset the position of everything
-                
+                    this.peds.reset();
 
 
             };
