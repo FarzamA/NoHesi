@@ -88,10 +88,6 @@ class PedCar {
                 console.error(error);
             });
         // };
-
-        
-
-        
     }
 }
 
