@@ -19,7 +19,7 @@ class Game {
 
         this.init();
 
-        this.skybox = new Skybox(900, 900, 900, 'retrosun');
+        this.skybox = new Skybox(1100, 1100, 1100, 'retrosun');
         this.loadAssets();
         this.lights();
 
@@ -51,7 +51,7 @@ class Game {
         // this.scene.background = new THREE.Color(0, 0, 0)
         // dev purposes
         // this.scene.add( new THREE.AxesHelper(5) );
-        this.camera = new THREE.PerspectiveCamera( 85, window.innerWidth/window.innerHeight, 0.1, 1000 );
+        this.camera = new THREE.PerspectiveCamera( 100, window.innerWidth/window.innerHeight, 0.1, 1000 );
         // adjust height to make it seem like head height
         this.camera.position.set(0.3, 1.7, -3.0)
 
@@ -59,11 +59,11 @@ class Game {
         this.camera.rotateY(-Math.PI);
         this.camera.rotateX(Math.PI*0.093);
 
-        this.cameraController = new THREE.Object3D();
-        this.cameraController.add( this.camera );
+        // this.cameraController = new THREE.Object3D();
+        // this.cameraController.add( this.camera );
         this.cameraTarget = new THREE.Vector3(0, 0, 0);
 
-        this.scene.add( this.cameraController );
+        // this.scene.add( this.cameraController );m
         
         // Grab the things we need from index.html
         const canvas = document.querySelector("#game");
@@ -361,7 +361,8 @@ class Game {
                     this.gameOver = true
                     // what happens after the game is over
                     this.controls.unlock();
-                    this.cameraController.position.set((this.playerCar.position.x+3), 0, (this.playerCar.position.z-3));
+                    // this.playerCar.position.set(0.3, 0.3, 0);
+                    this.camera.position.set(0, 2, 0);
                     this.textMesh.position.set((this.playerCar.position.x - 0.5) , (this.playerCar.position.y + 1.5), (this.playerCar.position.z + 1.0))
                     this.scene.add( this.textMesh )
                 }
@@ -436,19 +437,18 @@ class Game {
                 // window.open(intersects[0].object.userData.URL);
             } else if (this.textMesh === intersects[0].object) {
                 // console.log(intersects[0].object);
-                    this.updateCamera();
-                    // this.song.currentTime = 0;
-                    // this.inGame = true; 
-                    this.gameOver = false; 
-                    // this.isPaused = false;
-                    // this.gameTimer.start();
-
-                    // this.cameraController.position.set(0, 0, 0);
-
+                // this.song.currentTime = 0;
+                // this.inGame = true; 
+                // this.isPaused = false;
+                // this.gameTimer.start();
+                
+                // this.cameraController.position.set(0, 0, 0);
+                
                 // reset the position of everything
-                    this.peds.reset();
+                this.peds.reset();
+                this.updateCamera();
                 //reset camera position
-                    this.updateCamera();
+                    // this.updateCamera();
 
 
             };
@@ -458,8 +458,9 @@ class Game {
     };
 
     updateCamera() {
+        this.playerCar.position.set(0.3, 0.3, 0);
         // copy allows for u to take the properties of another camera and put them into the one called
-        this.cameraController.position.set(1, 1, -10);
+        this.camera.position.set(1, 2, -10);
         // utilizing 0,0,0
         this.camera.lookAt( this.cameraTarget );
         // the parent of the textmesh is the scene which where we want to get rid of it from after click
@@ -467,6 +468,7 @@ class Game {
 
         // making a variable to declare game start 
         this.inGame = true;
+        this.gameOver = false; 
         this.gameTimer.start();
 
         this.sound.play();
