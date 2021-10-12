@@ -362,6 +362,7 @@ class Game {
                     // what happens after the game is over
                     this.controls.unlock();
                     this.cameraController.position.set((this.playerCar.position.x+3), 0, (this.playerCar.position.z-3));
+                    this.textMesh.position.set((this.playerCar.position.x - 0.5) , (this.playerCar.position.y + 1.5), (this.playerCar.position.z + 1.0))
                     this.scene.add( this.textMesh )
                 }
             };
@@ -447,6 +448,7 @@ class Game {
 
                 // reset the position of everything
                 
+
 
             };
         }
