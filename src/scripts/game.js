@@ -17,13 +17,13 @@ class Game {
 
         this.init();
 
-        this.skybox = new Skybox(1000, 1000, 1000, 'retrosun');
-
+        this.skybox = new Skybox(900, 900, 900, 'retrosun');
+        this.loadAssets();
         this.lights();
+
 
         this.plane();
 
-        this.loadAssets();
 
         this.peds = new PedCar(this.scene, 20);
 
@@ -40,6 +40,7 @@ class Game {
         this.setupControls();
         this.scene.add( this.skybox.box );
         this.inGame = false;
+        this.gameOver = false;
     }
     
     //initialization method needs to be more compartamentalized --- BREAK THIS DOWN
@@ -50,7 +51,7 @@ class Game {
         // this.scene.background = new THREE.Color(0, 0, 0)
         // dev purposes
         // this.scene.add( new THREE.AxesHelper(5) );
-        this.camera = new THREE.PerspectiveCamera( 75, window.innerWidth/window.innerHeight, 0.1, 1000 );
+        this.camera = new THREE.PerspectiveCamera( 85, window.innerWidth/window.innerHeight, 0.1, 1000 );
         // adjust height to make it seem like head height
         this.camera.position.set(-1, 2.5, 1)
 
@@ -82,14 +83,14 @@ class Game {
     // Lighting is necessary to bounce off of any loaded models
     lights() {
         
-        const color = new THREE.Color("rgb(130,0,170)")
-        const color2 = new THREE.Color("rgb(219, 172, 0)")
+        const color = new THREE.Color("rgb(175,0,98)")
+        // const color2 = new THREE.Color("rgb(219, 172, 0)")
 
         const light = new THREE.DirectionalLight(color, 1.0);
 
-        const light2 = new THREE.DirectionalLight(color2, 0.5);
+        // const light2 = new THREE.DirectionalLight(color2, 0.5);
 
-        const helper2 = new THREE.DirectionalLightHelper( light2, 5 );
+        // const helper2 = new THREE.DirectionalLightHelper( light2, 5 );
         
         this.spotLight = new THREE.SpotLight(color, 2);
         this.spotLight.castShadow = true;
@@ -100,12 +101,12 @@ class Game {
         light.rotateX(Math.PI * 0.5);
         light.position.set(2, 200, 1000); 
 
-        light2.rotateX(Math.PI * 0.4);
-        light2.position.set(2, 300, 1000);
+        // light2.rotateX(Math.PI * 0.4);
+        // light2.position.set(2, 300, 1000);
 
         const hemi = new THREE.HemisphereLight(0xffeeb1, 0x80820, 4)
         
-        this.scene.add(  this.spotLight, hemi, light, ambient, helper, light2, helper2 ); 
+        this.scene.add(  this.spotLight, hemi, light, ambient, helper ); 
     };
 
     // Create a basic plane
@@ -168,51 +169,64 @@ class Game {
         this.controls.addEventListener('lock', function() {
             // menu.style.display = 'none';
             menu.classList.add('hidden');
+            if (that.gameOver) {
+                that.cameraController.position.set(-1, 2.5, 1);
+            };
             
             that.isPaused = false;
         }); 
         this.controls.addEventListener('unlock', function() {
             // menu.style.display = 'block';
-            const button = document.getElementById("start-button").innerHTML = 'Resume Game';
+            if (!that.gameOver) {
+                const button = document.getElementById("start-button").innerHTML = 'Resume Game';
+            } else {
+                const button = document.getElementById("start-button").innerHTML = 'Try Again';
+            }
             menu.classList.remove('hidden');
             that.isPaused = true;
         } );
+
+        // this.controls.addEventListener('change', function() {
+        //     if (that.inGame) {
+        //         return;
+        //     }
+        // })
 
         // make keyboard controls for pointer locked splash screen \
         // event returns the **KEYCODE**
         const onKeyDown = function(event) {
             switch(event.code) {
                 case "KeyW":
-                    if (!that.inGame) {
+                    if (!that.inGame || that.gameOver) {
                         that.controls.moveForward(0.25);
-                    } else {
+                    } else if (!that.gameOver) {
                         if (that.playerCar.position.z < 5) {
                             that.playerCar.position.z += 0.5;
                         };
                     };
                     break; 
                 case "KeyA":
-                    if (!that.inGame) {
+                    if (!that.inGame || that.gameOver) {
                         that.controls.moveRight(-0.25);
-                    } else {
+                    } else if (!that.gameOver) {
                         if (that.playerCar.position.x < 10.5) {
                             that.playerCar.position.x += 0.5;
                         };
                     };
                     break;
                 case "KeyS":
-                    if (!that.inGame) {
+                    if (!that.inGame || that.gameOver) {
                         that.controls.moveForward(-0.25);
-                    } else {
+                    } else if (!that.gameOver) {
                         if (that.playerCar.position.z > -5) {
                             that.playerCar.position.z -= 0.5;
                         }
                     };
                     break;
                 case "KeyD":
-                    if (!that.inGame) {
+                    if (!that.inGame || that.gameOver) {
                         that.controls.moveRight(0.25);
-                    } else {
+                    } else if (!that.gameOver) {
                         if (that.playerCar.position.x > -10.5) {
                             that.playerCar.position.x -= 0.5;
                         }
@@ -221,6 +235,10 @@ class Game {
                 case "KeyM":
                     that.sound.stop();
                     break;
+                // case "Escape":
+                //     const menu = document.querySelector(".menu");
+                //     menu.classList.remove('hidden');
+                //     break;
             };
         };
 
@@ -262,6 +280,8 @@ class Game {
             // console.log(that.playerBox);
 
             // that.playerBox.setfromObject({object: that.playerCar});
+
+
                     
             // animate the whole game once the actual file we are loading has loaded
             //that.animate();
@@ -274,6 +294,8 @@ class Game {
             }, function(error) {
                 console.error(error);
             });
+
+           
     }
 
     // will have an animate function to actually render and animate everything
@@ -293,8 +315,14 @@ class Game {
             // this.textMesh.rotation.y += 0.001;
             this.update(time);
         };
+
+        if (this.gameOver) {
+            this.sound.stop();
+        };
+
+        this.spotLight.position.set(0, 30, 0);
         
-        if (this.inGame && !this.isPaused) {
+        if (this.inGame && !this.isPaused && !this.gameOver) {
 
             
             // console.log(this.gameTimer.getElapsedTime());
@@ -326,12 +354,15 @@ class Game {
                 }
             }
 
+
             this.updateColliders();
             // console.log(this.pedBox);
             for (let i = 0; i < this.peds.boxGeoms.length; i++) {
                 if (this.peds.boxGeoms[i].intersectsBox(this.playerBox)) {
                     
                     console.log('hit');
+                    this.gameOver = true
+                    this.controls.unlock();
                 }
             };
         }
@@ -339,7 +370,6 @@ class Game {
         
 
         // this.controls.update();
-        // if (this.playerCar) {
         //     this.render();
         // };
 
@@ -349,11 +379,9 @@ class Game {
 
         // this attatches a light to your camera position and moves it as
         // you move in order to shine a light on everything you look at
-        this.spotLight.position.set(
-            this.camera.position.x, 
-            this.camera.position.y + 10, 
-            this.camera.position.z + 4
-        );
+        // if (this.playerCar) {
+           
+        // };
         // this.spotLight.rotateY(-Math.PI);
     };
 
@@ -417,7 +445,7 @@ class Game {
     updateCamera() {
         // copy allows for u to take the properties of another camera and put them into the one called
         this.cameraController.position.set(1, 1, -10);
-        // utilizing 0, 0, 0 bc that's where I placed the car 
+        // utilizing 0,0,0
         this.camera.lookAt( this.cameraTarget );
         // the parent of the textmesh is the scene which where we want to get rid of it from after click
         this.textMesh.removeFromParent();
