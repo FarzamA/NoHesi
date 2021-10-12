@@ -25,7 +25,7 @@ class Game {
 
         this.loadAssets();
 
-        this.peds = new PedCar(this.scene, 10);
+        this.peds = new PedCar(this.scene, 20);
 
         this.isPaused = false;
 
@@ -286,7 +286,7 @@ class Game {
         if (this.inGame && !this.isPaused) {
 
             
-            console.log(this.gameTimer.getElapsedTime());
+            // console.log(this.gameTimer.getElapsedTime());
             this.scoreEle.innerHTML = `${Math.floor(this.gameTimer.getElapsedTime() * 100)}`;
             const htmlEle = document.querySelector("#score");
             htmlEle.appendChild(this.scoreEle);
@@ -311,7 +311,7 @@ class Game {
                     this.peds.cars[i].position.z = rando2; 
                     this.peds.cars[i].position.x = rando;
                 } else {
-                    this.peds.cars[i].position.z -= 0.5;
+                    this.peds.cars[i].position.z -= 0.25;
                 }
             }
 

@@ -18,7 +18,7 @@ class PedCar {
         const that = this;
         const loader = new GLTFLoader();
 
-        for (let i = 0; i < this.numCars; i++) {
+        // for (let i = 0; i < this.numCars; i++) {
             // const that2 = that;
             loader.load("./src/assets/cars/pedCar/scene.gltf", function(gltf) {
                 const pedCar = gltf.scene; 
@@ -51,8 +51,21 @@ class PedCar {
 
                 // console.log( pedBox );
 
-                that.boxGeoms[i] = pedBox
-                that.cars[i] = pedCar
+                that.boxGeoms.push(pedBox)
+                that.cars.push(pedCar)
+
+                // instantiating an instance of the object we just made 
+                // and reusing it in order to optimize the amount of models we load
+                // here we just load copies of models instead of before we were loading the same model 
+                // multiple times
+                for (let i = 0; i < (that.numCars-1); i++) {
+                    // console.log(pedCar)
+                    const clone = pedCar.clone();
+                    that.cars.push(clone);
+                    const boxClone = new THREE.Box3().setFromObject(clone);
+                    that.boxGeoms.push(boxClone);
+                    that.scene.add( clone );
+                }
 
                 that.scene.add( pedCar );
                 
@@ -63,7 +76,9 @@ class PedCar {
             function(error) {
                 console.error(error);
             });
-        };
+        // };
+
+        
 
         
     }
