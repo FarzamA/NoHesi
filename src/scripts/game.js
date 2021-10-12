@@ -395,10 +395,6 @@ class Game {
         };
     }
 
-    endScreen() {
-
-    }
-
     update( time ) {
         this.textMesh.position.y += (Math.cos(time) * 0.001);
     }
@@ -445,7 +441,9 @@ class Game {
                     // this.inGame = true; 
                     this.gameOver = false; 
                     // this.isPaused = false;
-                    this.gameTimer.start();
+                    // this.gameTimer.start();
+
+                    // this.cameraController.position.set(0, 0, 0);
 
                 // reset the position of everything
                     this.peds.reset();
