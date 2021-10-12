@@ -8,6 +8,7 @@ import { FontLoader } from "three/examples/jsm/loaders/FontLoader";
 import { TextGeometry } from "three/examples/jsm/geometries/TextGeometry";
 import Skybox from "./skybox";
 import PedCar from "./pedcars";
+import Sound from "./sounds";
 
 
 // Game class to hold all game logic
@@ -27,11 +28,13 @@ class Game {
         // this.rayCast();
         // this.lives = 2;
         // this.scene.add(this.peds.cars[0]);
+        this.isPaused = false;
 
         this.clock = new THREE.Clock();
 
         this.road();
         
+        this.sound = new Sound("track1.mp3");
         this.setupControls();
         this.scene.add( this.skybox.box );
         this.inGame = false;
@@ -155,8 +158,12 @@ class Game {
         // need this in order to be able to focus in and out of start menu 
         this.controls.addEventListener('lock', function() {
             menu.style.display = 'none';
+            that.isPaused = false;
         }); 
-        this.controls.addEventListener('unlock', () => (menu.style.display = 'block'));
+        this.controls.addEventListener('unlock', function() {
+            menu.style.display = 'block';
+            that.isPaused = true;
+        } );
 
         // make keyboard controls for pointer locked splash screen \
         // event returns the **KEYCODE**
@@ -197,6 +204,9 @@ class Game {
                             that.playerCar.position.x -= 0.5;
                         }
                     };
+                    break;
+                case "KeyM":
+                    that.sound.stop();
                     break;
             };
         };
@@ -271,7 +281,8 @@ class Game {
             this.update(time);
         };
         
-        if (this.inGame) {
+        if (this.inGame && !this.isPaused) {
+            const menu = document.getElementById("start-button").innerHTML = 'Game Paused';
             // this.playerCar.rotation.x += (Math.sin(time) * 0.0003);
             // debugger
             // this.skybox.box.rotation.z += 0.01;
@@ -304,6 +315,8 @@ class Game {
                 }
             };
         }
+
+        
 
         // this.controls.update();
         // if (this.playerCar) {
@@ -398,6 +411,7 @@ class Game {
         // making a variable to declare game start 
         this.inGame = true;
         // this.controls.disconnect();
+        this.sound.play();
     }
 
     createText() {
