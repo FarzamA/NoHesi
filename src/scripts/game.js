@@ -81,20 +81,31 @@ class Game {
     // Create lighting
     // Lighting is necessary to bounce off of any loaded models
     lights() {
-        const light = new THREE.DirectionalLight(0xffffff, 3.0);
+        
+        const color = new THREE.Color("rgb(130,0,170)")
+        const color2 = new THREE.Color("rgb(219, 172, 0)")
 
-        this.spotLight = new THREE.SpotLight(0xffa95c, 10);
+        const light = new THREE.DirectionalLight(color, 1.0);
+
+        const light2 = new THREE.DirectionalLight(color2, 0.5);
+
+        const helper2 = new THREE.DirectionalLightHelper( light2, 5 );
+        
+        this.spotLight = new THREE.SpotLight(color, 2);
         this.spotLight.castShadow = true;
 
 
         const helper = new THREE.DirectionalLightHelper( light, 5 );
         const ambient = new THREE.AmbientLight( 0x707070, 0.6 );
-        light.rotateX(-Math.PI * 0.5);
-        light.position.set(2, 1, 0); 
+        light.rotateX(Math.PI * 0.5);
+        light.position.set(2, 200, 1000); 
+
+        light2.rotateX(Math.PI * 0.4);
+        light2.position.set(2, 300, 1000);
 
         const hemi = new THREE.HemisphereLight(0xffeeb1, 0x80820, 4)
         
-        this.scene.add( this.spotLight, hemi, light, ambient ); 
+        this.scene.add(  this.spotLight, hemi, light, ambient, helper, light2, helper2 ); 
     };
 
     // Create a basic plane
@@ -104,7 +115,7 @@ class Game {
         // Rotating the plane to make it flat by 90 degrees around the x axis
         geometry.rotateX(-Math.PI * 0.5);
 
-        const color = new THREE.Color("rgb(0, 65, 171)");
+        const color = new THREE.Color("rgb(0, 18, 214)");
 
         // threejs comes with mad materials explore these for materials of your car, also takes a color as an option
         const material = new THREE.MeshBasicMaterial( { color: color, side: THREE.DoubleSide, wireframe: true } );
@@ -128,9 +139,9 @@ class Game {
 
         geometry.rotateX(-Math.PI * 0.5);
 
-        const color = new THREE.Color("rgb(21, 12, 28)");
+        const color = new THREE.Color("rgb(0, 0, 0)");
 
-        const material = new THREE.MeshBasicMaterial( { color: color, side: THREE.DoubleSide });
+        const material = new THREE.MeshPhongMaterial( { color: color, side: THREE.DoubleSide });
 
         const road = new THREE.Mesh( geometry, material );
 
@@ -295,7 +306,7 @@ class Game {
             // this.playerCar.rotation.x += (Math.sin(time) * 0.0003);
             // debugger
             // this.skybox.box.rotation.z += 0.01;
-            this.skybox.box.rotation.x += (Math.cos(time) * 0.001);
+            this.skybox.box.rotation.x += (Math.cos(time) * 0.0001);
             this.plane.rotation.y += 0.01;
             // debugger
             for (let i = 0; i < this.peds.cars.length; i++) {
@@ -339,10 +350,11 @@ class Game {
         // this attatches a light to your camera position and moves it as
         // you move in order to shine a light on everything you look at
         this.spotLight.position.set(
-            this.camera.position.x + 2, 
-            this.camera.position.y + 2, 
-            this.camera.position.z + 2
+            this.camera.position.x, 
+            this.camera.position.y + 10, 
+            this.camera.position.z + 4
         );
+        // this.spotLight.rotateY(-Math.PI);
     };
 
     updateColliders() {
@@ -404,7 +416,7 @@ class Game {
 
     updateCamera() {
         // copy allows for u to take the properties of another camera and put them into the one called
-        this.cameraController.position.set(1, 2, -10);
+        this.cameraController.position.set(1, 1, -10);
         // utilizing 0, 0, 0 bc that's where I placed the car 
         this.camera.lookAt( this.cameraTarget );
         // the parent of the textmesh is the scene which where we want to get rid of it from after click
