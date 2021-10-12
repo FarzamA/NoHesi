@@ -14,6 +14,8 @@ class Game {
     // create scene with inital controls
     constructor() {
         const that = this;
+        this.inGame = false;
+        this.gameOver = false;
 
         this.init();
 
@@ -39,8 +41,6 @@ class Game {
         this.sound = new Sound("track1.mp3");
         this.setupControls();
         this.scene.add( this.skybox.box );
-        this.inGame = false;
-        this.gameOver = false;
     }
     
     //initialization method needs to be more compartamentalized --- BREAK THIS DOWN
@@ -53,10 +53,11 @@ class Game {
         // this.scene.add( new THREE.AxesHelper(5) );
         this.camera = new THREE.PerspectiveCamera( 85, window.innerWidth/window.innerHeight, 0.1, 1000 );
         // adjust height to make it seem like head height
-        this.camera.position.set(-1, 2.5, 1)
+        this.camera.position.set(0.3, 1.7, -3.0)
 
         //rotating initial camera to start off facing the sunset might change later
         this.camera.rotateY(-Math.PI);
+        this.camera.rotateX(Math.PI*0.093);
 
         this.cameraController = new THREE.Object3D();
         this.cameraController.add( this.camera );
@@ -169,9 +170,6 @@ class Game {
         this.controls.addEventListener('lock', function() {
             // menu.style.display = 'none';
             menu.classList.add('hidden');
-            if (that.gameOver) {
-                that.cameraController.position.set(-1, 2.5, 1);
-            };
             
             that.isPaused = false;
         }); 
@@ -197,7 +195,7 @@ class Game {
         const onKeyDown = function(event) {
             switch(event.code) {
                 case "KeyW":
-                    if (!that.inGame || that.gameOver) {
+                    if ((!that.inGame || that.gameOver) && that.controls.isLocked) {
                         that.controls.moveForward(0.25);
                     } else if (!that.gameOver) {
                         if (that.playerCar.position.z < 5) {
@@ -206,7 +204,7 @@ class Game {
                     };
                     break; 
                 case "KeyA":
-                    if (!that.inGame || that.gameOver) {
+                    if ((!that.inGame || that.gameOver) && that.controls.isLocked) {
                         that.controls.moveRight(-0.25);
                     } else if (!that.gameOver) {
                         if (that.playerCar.position.x < 10.5) {
@@ -215,7 +213,7 @@ class Game {
                     };
                     break;
                 case "KeyS":
-                    if (!that.inGame || that.gameOver) {
+                    if ((!that.inGame || that.gameOver) && that.controls.isLocked) {
                         that.controls.moveForward(-0.25);
                     } else if (!that.gameOver) {
                         if (that.playerCar.position.z > -5) {
@@ -224,7 +222,7 @@ class Game {
                     };
                     break;
                 case "KeyD":
-                    if (!that.inGame || that.gameOver) {
+                    if ((!that.inGame || that.gameOver) && that.controls.isLocked) {
                         that.controls.moveRight(0.25);
                     } else if (!that.gameOver) {
                         if (that.playerCar.position.x > -10.5) {
@@ -363,6 +361,7 @@ class Game {
                     console.log('hit');
                     this.gameOver = true
                     this.controls.unlock();
+                    this.cameraController.position.set(-1, 0, -3);
                 }
             };
         }
