@@ -25,9 +25,13 @@ class PedCar {
                 const min = Math.floor(-20);
                 const max = Math.floor(5);
                 const rando = Math.floor((Math.random() * (max - min) + min));
+
+                const min2 = Math.floor(100);
+                const max2 = Math.floor(450);
+                const rando2 = Math.floor((Math.random() * (max2 - min2) + min2));
                 pedCar.recieveShadow = true; 
                 pedCar.scale.set(0.015, 0.015, 0.015);
-                pedCar.position.set(rando, 0.3, 10);
+                pedCar.position.set(rando, 0.3, rando2);
 
 
                 pedCar.traverse( function(c) {

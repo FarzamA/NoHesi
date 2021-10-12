@@ -1,7 +1,5 @@
 import * as THREE from "three";
-import Stats from "three/examples/jsm/libs/stats.module";
-// Added for developer purposes not intending to keep
-import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
+// import Stats from "three/examples/jsm/libs/stats.module";
 import { PointerLockControls } from "three/examples/jsm/controls/PointerLockControls";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
 import { FontLoader } from "three/examples/jsm/loaders/FontLoader";
@@ -16,23 +14,27 @@ class Game {
     // create scene with inital controls
     constructor() {
         const that = this;
+
         this.init();
+
         this.skybox = new Skybox(1000, 1000, 1000, 'retrosun');
+
         this.lights();
+
         this.plane();
-        // this.boxGeoms = [0, 1, 2, 3];
-        // this.cars = [0, 1, 2, 3]
+
         this.loadAssets();
-        // this.cars = [];
+
         this.peds = new PedCar(this.scene, 10);
-        // this.rayCast();
-        // this.lives = 2;
-        // this.scene.add(this.peds.cars[0]);
+
         this.isPaused = false;
 
         this.clock = new THREE.Clock();
 
         this.road();
+
+        this.gameTimer = new THREE.Clock();
+        this.scoreEle = document.createElement("p");
         
         this.sound = new Sound("track1.mp3");
         this.setupControls();
@@ -73,10 +75,6 @@ class Game {
         document.body.appendChild( this.renderer.domElement )
         
         this.renderer.domElement.addEventListener('click', this.rayCast.bind(this), false); 
-        
-        // Adding fps/ms/other resource tracker 
-        this.stats = Stats(); 
-        document.body.appendChild(this.stats.dom)
     };
 
     
@@ -145,7 +143,7 @@ class Game {
 
         const that = this;
 
-        const menu = document.querySelector("#menu");
+        const menu = document.querySelector(".menu");
         const startButton = document.querySelector("#start-button");
         
         
@@ -157,11 +155,15 @@ class Game {
 
         // need this in order to be able to focus in and out of start menu 
         this.controls.addEventListener('lock', function() {
-            menu.style.display = 'none';
+            // menu.style.display = 'none';
+            menu.classList.add('hidden');
+            
             that.isPaused = false;
         }); 
         this.controls.addEventListener('unlock', function() {
-            menu.style.display = 'block';
+            // menu.style.display = 'block';
+            const button = document.getElementById("start-button").innerHTML = 'Resume Game';
+            menu.classList.remove('hidden');
             that.isPaused = true;
         } );
 
@@ -282,7 +284,14 @@ class Game {
         };
         
         if (this.inGame && !this.isPaused) {
-            const menu = document.getElementById("start-button").innerHTML = 'Game Paused';
+
+            
+            console.log(this.gameTimer.getElapsedTime());
+            this.scoreEle.innerHTML = `${Math.floor(this.gameTimer.getElapsedTime() * 100)}`;
+            const htmlEle = document.querySelector("#score");
+            htmlEle.appendChild(this.scoreEle);
+    
+            // const menu = document.getElementById("start-button").innerHTML = 'Resume Game';
             // this.playerCar.rotation.x += (Math.sin(time) * 0.0003);
             // debugger
             // this.skybox.box.rotation.z += 0.01;
@@ -295,7 +304,7 @@ class Game {
                     const max = Math.floor(5);
                     const rando = Math.floor((Math.random() * (max - min) + min));
 
-                    const min2 = Math.floor(300);
+                    const min2 = Math.floor(200);
                     const max2 = Math.floor(450);
                     const rando2 = Math.floor((Math.random() * (max2 - min2) + min2));
 
@@ -375,17 +384,10 @@ class Game {
 
         const intersects = this.raycaster.intersectObjects( this.scene.children );
         
-        // debugger
         // console.log(intersects);
         if (intersects.length > 0) {
             // need to find a better way to deal w this bc console gets an error everytime you click something that doesn't have a parent
             if ( (intersects[0].object.parent.parent) && (this.playerCar.children.includes(intersects[0].object.parent.parent.parent.parent)) ) {
-                // && this.playerCar.children.includes(intersects[0].object.parent.parent.parent.parent)
-                // console.log(intersects);
-                // console.log(intersects[0].object.parent.parent.parent.parent);
-                // console.log(this.playerCar);
-                // console.log(this.playerCar.children);
-                // console.log(this.playerCar.children.includes(intersects[0].object.parent.parent.parent.parent));
                 if (!this.textMesh) {
                     this.createText();
                 }
@@ -410,7 +412,8 @@ class Game {
 
         // making a variable to declare game start 
         this.inGame = true;
-        // this.controls.disconnect();
+        this.gameTimer.start();
+
         this.sound.play();
     }
 
