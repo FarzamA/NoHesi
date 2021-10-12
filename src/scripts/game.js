@@ -348,7 +348,7 @@ class Game {
                     this.peds.cars[i].position.z = rando2; 
                     this.peds.cars[i].position.x = rando;
                 } else {
-                    this.peds.cars[i].position.z -= 1.0;
+                    this.peds.cars[i].position.z -= 0.75;
                 }
             }
 
@@ -357,11 +357,12 @@ class Game {
             // console.log(this.pedBox);
             for (let i = 0; i < this.peds.boxGeoms.length; i++) {
                 if (this.peds.boxGeoms[i].intersectsBox(this.playerBox)) {
-                    
                     console.log('hit');
                     this.gameOver = true
+                    // what happens after the game is over
                     this.controls.unlock();
-                    this.cameraController.position.set(-1, 0, -3);
+                    this.cameraController.position.set((this.playerCar.position.x+3), 0, (this.playerCar.position.z-3));
+                    this.scene.add( this.textMesh )
                 }
             };
         }
@@ -391,6 +392,10 @@ class Game {
         for (let i = 0; i < this.peds.boxGeoms.length; i++) {
             this.peds.boxGeoms[i].setFromObject(this.peds.cars[i]);
         };
+    }
+
+    endScreen() {
+
     }
 
     update( time ) {
@@ -435,6 +440,14 @@ class Game {
             } else if (this.textMesh === intersects[0].object) {
                 // console.log(intersects[0].object);
                     this.updateCamera();
+                    this.inGame = true; 
+                    this.gameOver = false; 
+                    this.isPaused = false;
+                    this.gameTimer.start();
+
+                // reset the position of everything
+                
+
             };
         }
 
