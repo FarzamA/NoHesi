@@ -290,6 +290,7 @@ class Game {
             this.textMesh.position.y += (Math.cos(time) * 0.001);
             this.gitText.position.y += (Math.cos(time) * 0.001);
             this.linkedText.position.y += (Math.cos(time) * 0.001);
+            this.titleText.position.y += (Math.cos(time) * 0.01);
         };
 
         if (this.gameOver) {
@@ -331,9 +332,9 @@ class Game {
                     this.gameOver = true
                     // Logic for once the game is over
                     this.controls.unlock();
-                    this.camera.position.set(0, 2, 0);
+                    this.camera.position.set((that.playerCar.position.x) , 2.0, (that.playerCar.position.z - 2.0));
                     this.textMesh.position.set((that.playerCar.position.x + 0.6) , (that.playerCar.position.y + 1.5), (that.playerCar.position.z + 2.0))
-                    this.scene.add( this.textMesh )
+                    this.scene.add( this.textMesh, this.titleText )
                 }
             };
         }
@@ -411,6 +412,7 @@ class Game {
 
         // making a variable to declare game start 
         this.inGame = true;
+        this.scene.remove( this.titleText );
         this.gameOver = false; 
         this.gameTimer.start();
 
@@ -422,6 +424,12 @@ class Game {
         const that = this;
 
         loader.load('./src/assets/fonts/pixel.json', function ( font ) {
+            const titleGeo = new TextGeometry ('NO HESITATION', {
+                font: font,
+                size: 5.0,
+                height: 1.0
+            })
+
             const linkedGeo = new TextGeometry ('LINKEDIN', {
                 font: font,
                 size: 0.7,
@@ -448,6 +456,13 @@ class Game {
                 new THREE.MeshPhongMaterial( { color: color2 }) // sets the side
             ];
 
+            that.titleText = new THREE.Mesh( titleGeo, materials );
+            that.titleText.castShadow = true;
+
+            that.titleText.position.set(18, 3, 100);
+            that.titleText.rotateY(-Math.PI)
+
+
             that.gitText = new THREE.Mesh( gitGeo, materials );
             that.gitText.castShadow = true;
 
@@ -465,7 +480,7 @@ class Game {
 
             that.textMesh.rotateY(Math.PI * 0.5);
 
-            that.scene.add( that.gitText, that.linkedText );
+            that.scene.add( that.gitText, that.linkedText, that.titleText );
             
 
         },  function(load) {
