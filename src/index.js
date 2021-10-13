@@ -2,15 +2,14 @@ import Game from "./scripts/game";
 
 
 document.addEventListener('DOMContentLoaded', () => {
-    console.log('DOM fully loaded and parsed');
-
     const g = new Game();
     g.animate();
 
-    //trying to handle weird stuff that happens on window resize
+    // Handling window resize logic
     window.addEventListener('resize', onWindowResize, false);
     
     function onWindowResize() {
+        // setting camera frustrum (basically viewport/how big the screen is)
         g.camera.aspect = window.innerWidth/ window.innerHeight;
         
         // necessary after updating the aspect of our camera field

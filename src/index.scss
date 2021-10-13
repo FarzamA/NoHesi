@@ -9,25 +9,20 @@
 }
 
 #score {
-    // display: flex;
     font-family: 'pixel';
     position: fixed;
     color: white;
     font-size: 100px;
     padding-left: 1%;
-    // margin: auto;
-    // padding-top: 1%;
 }
 
 #game {
     width: 100%;
     height: 100%;
     display: block;
-    // background: #bdc3c7;
 }
 
 .menu {
-    // z-index: 2;
     display: flex;
     flex-direction: column;
     text-align: center;
@@ -42,7 +37,6 @@
 
 .menu.hidden {
     display: none;
-    // z-index: -1;
 }
 
 #start-button {

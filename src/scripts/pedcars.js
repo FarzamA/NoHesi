@@ -2,7 +2,7 @@ import * as THREE from "three";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
 
 
-class PedCar {
+class Peds {
     constructor(scene, num) {
         this.boxGeoms = [];
         this.cars = [];
@@ -11,24 +11,10 @@ class PedCar {
         this.init();
     }
 
-    reset() {
-        for (let i = 0; i < this.cars.length; i++) {
-            const min = Math.floor(-20);
-            const max = Math.floor(5);
-            const rando = Math.floor((Math.random() * (max - min) + min));
-
-            const min2 = Math.floor(100);
-            const max2 = Math.floor(450);
-            const rando2 = Math.floor((Math.random() * (max2 - min2) + min2));
-            this.cars[i].position.set(rando, 0.3, rando2);
-            // this.boxGeoms[i].position.set(rando, 0.3, rando2);
-        }
-    }
-
     init() {
         const that = this;
         const loader = new GLTFLoader();
-
+        // comment this in if you want to melt cpus
         // for (let i = 0; i < this.numCars; i++) {
             // const that2 = that;
             loader.load("./src/assets/cars/pedCar/scene.gltf", function(gltf) {
@@ -47,7 +33,6 @@ class PedCar {
 
                 pedCar.traverse( function(c) {
                     if (c.isMesh) {
-                        // c.geometry.computeBoundingBox;
                         c.castShadow = true; 
                         c.recieveShadow = true; 
                     };
@@ -57,10 +42,8 @@ class PedCar {
                     };
                 });
 
-                // handling the bounding box logic 
+                // handling the bounding box logic for colliders
                 const pedBox = new THREE.Box3().setFromObject(pedCar);
-
-                // console.log( pedBox );
 
                 that.boxGeoms.push(pedBox)
                 that.cars.push(pedCar)
@@ -70,7 +53,6 @@ class PedCar {
                 // here we just load copies of models instead of before we were loading the same model 
                 // multiple times
                 for (let i = 0; i < (that.numCars-1); i++) {
-                    // console.log(pedCar)
                     const clone = pedCar.clone();
                     that.cars.push(clone);
                     const boxClone = new THREE.Box3().setFromObject(clone);
@@ -89,6 +71,19 @@ class PedCar {
             });
         // };
     }
+
+    reset() {
+        for (let i = 0; i < this.cars.length; i++) {
+            const min = Math.floor(-20);
+            const max = Math.floor(5);
+            const rando = Math.floor((Math.random() * (max - min) + min));
+
+            const min2 = Math.floor(100);
+            const max2 = Math.floor(450);
+            const rando2 = Math.floor((Math.random() * (max2 - min2) + min2));
+            this.cars[i].position.set(rando, 0.3, rando2);
+        }
+    }
 }
 
-export default PedCar;
+export default Peds;
