@@ -33,7 +33,7 @@ class Game {
         //Create Cars
         this.road();
         //Create Ped Cars
-        this.peds = new Peds(this.scene, 20);
+        this.peds = new Peds(this.scene);
         // Setup Controls
         this.setupControls();
         // In order to get bouncing animation on text
@@ -41,6 +41,8 @@ class Game {
         // Implement score
         this.gameTimer = new THREE.Clock();
         this.scoreEle = document.createElement("p");
+        const htmlEle = document.querySelector("#score");
+        htmlEle.appendChild(this.scoreEle);
         // Implement soundtrack 
         this.sound = new Sound("track1.mp3");
     }
@@ -279,34 +281,52 @@ class Game {
 
     // Game loop + allows for things to easily move on screen
     animate() {
-        const that = this; 
-
         //needs to be passed in this way otherwise it won't work 
+        const that = this;
         requestAnimationFrame( function() { that.animate() } );
 
+        // Declaring outside if statement below bc used by multiple functions
         const time = this.clock.getElapsedTime();
-
+        
+        // Weird bug where everything still becomes out of position over time
         if (this.textMesh) {
-            this.textMesh.position.y += (Math.cos(time) * 0.001);
-            this.gitText.position.y += (Math.cos(time) * 0.001);
-            this.linkedText.position.y += (Math.cos(time) * 0.001);
+            this.textMesh.position.y += (Math.cos(time) * 0.0002);
+            this.gitText.position.y += (Math.cos(time) * 0.0002);
+            this.linkedText.position.y += (Math.cos(time) * 0.0002);
             this.titleText.position.y += (Math.cos(time) * 0.01);
-        };
-
-        if (this.gameOver) {
-            this.sound.stop();
         };
 
         this.spotLight.position.set(0, 30, 0);
         
+        
         if (this.inGame && !this.isPaused && !this.gameOver) {
-            this.scoreEle.innerHTML = `${Math.floor(this.gameTimer.getElapsedTime() * 100)}`;
-            const htmlEle = document.querySelector("#score");
-            htmlEle.appendChild(this.scoreEle);
+            this.score = Math.floor(this.gameTimer.getElapsedTime() * 100)
+            this.scoreEle.innerHTML = `${this.score}`;
+            // if we do it this way it'll add a car on every frame update
+            // setInterval(this.peds.newCar(this.score), 1000);
+
+            switch(this.score) {
+                case 100:
+                    this.scene.add(this.peds.cars[0]);
+                    break;
+                case 1000: // score amount to add a new car
+                    this.peds.newCar(); // can make this dynamic later by specifying car type, will also help scale difficulty
+                    break;
+                case 2700: 
+                    this.peds.newCar();
+                    break;
+                case 5000:
+                    this.peds.newCar();
+                    break;
+                case 8000:
+                    this.peds.newCar();
+                    break;
+            }
     
             this.skybox.box.rotation.x += (Math.cos(time) * 0.0001);
             this.plane.rotation.y += 0.01;
 
+            // Random car spawn after they hit -10 z index
             for (let i = 0; i < this.peds.cars.length; i++) {
                 if (this.peds.cars[i].position.z < -10) {
                     const min = Math.floor(-20);
@@ -328,17 +348,28 @@ class Game {
 
             for (let i = 0; i < this.peds.boxGeoms.length; i++) {
                 if (this.peds.boxGeoms[i].intersectsBox(this.playerBox)) {
-                    console.log('hit');
                     this.gameOver = true
                     // Logic for once the game is over
                     this.controls.unlock();
                     this.camera.position.set((that.playerCar.position.x) , 2.0, (that.playerCar.position.z - 2.0));
                     this.textMesh.position.set((that.playerCar.position.x + 0.6) , (that.playerCar.position.y + 1.5), (that.playerCar.position.z + 2.0))
                     this.scene.add( this.textMesh, this.titleText )
+                   
+                }
+            };
+
+            if (this.gameOver) {
+                this.sound.stop();
+                for (let i = 0; i < this.peds.cars.length; i++) {
+                    this.scene.remove(this.peds.cars[i])
+                }
+    
+                for (let i = 0; i < this.peds.cars.length; i++) {
+                    this.peds.cars.pop();
+                    this.peds.boxGeoms.pop();
                 }
             };
         }
-
 
         this.renderer.render ( this.scene, this.camera );
     };
@@ -379,6 +410,7 @@ class Game {
 
         const intersects = this.raycaster.intersectObjects( this.scene.children );
         
+        // the real magic
         if (intersects.length > 0) {
             if ( (intersects[0].object.parent.parent) && (this.playerCar.children.includes(intersects[0].object.parent.parent.parent.parent)) ) {
                 this.textMesh.position.set(
@@ -387,7 +419,7 @@ class Game {
                     (this.playerCar.position.z + 2.0)
                 );
                 this.scene.add( this.textMesh );
-            } else if (this.textMesh === intersects[0].object) {
+            } else if (this.textMesh === intersects[0].object) { // once user clicks drive
                 // reset the position of ped cars and go to game camera
                 this.peds.reset();
                 this.updateCamera();
@@ -413,6 +445,12 @@ class Game {
         // making a variable to declare game start 
         this.inGame = true;
         this.scene.remove( this.titleText );
+        this.peds.reset();
+
+        // for (let i = 1; i < this.peds.cars.length; i++) {
+        //     this.scene.remove( this.peds.cars[i] );
+        // }
+        // this.peds = new Peds(this.scene);
         this.gameOver = false; 
         this.gameTimer.start();
 
@@ -459,7 +497,7 @@ class Game {
             that.titleText = new THREE.Mesh( titleGeo, materials );
             that.titleText.castShadow = true;
 
-            that.titleText.position.set(18, 3, 100);
+            that.titleText.position.set(18, 5, 100);
             that.titleText.rotateY(-Math.PI)
 
 
