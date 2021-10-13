@@ -7,7 +7,6 @@ class Peds {
         this.boxGeoms = [];
         this.cars = [];
         this.scene = scene;
-        // this.numCars = num;
         this.init();
     }
 

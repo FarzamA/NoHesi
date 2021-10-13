@@ -40,11 +40,13 @@ class Game {
         this.clock = new THREE.Clock();
         // Implement score
         this.gameTimer = new THREE.Clock();
+        this.score = 0;
         this.scoreEle = document.createElement("p");
         const htmlEle = document.querySelector("#score");
         htmlEle.appendChild(this.scoreEle);
         // Implement soundtrack 
         this.sound = new Sound("track1.mp3");
+
     }
     
     init() {
@@ -172,12 +174,16 @@ class Game {
         // need this in order to be able to focus in and out of start menu 
         this.controls.addEventListener('lock', function() {
             // menu.style.display = 'none';
+            that.score += that.gameTimer.getDelta();
+            that.gameTimer.start();
             menu.classList.add('hidden');
+            
             
             that.isPaused = false;
         }); 
         this.controls.addEventListener('unlock', function() {
             // menu.style.display = 'block';
+            that.gameTimer.stop();
             if (!that.gameOver) {
                 const button = document.getElementById("start-button").innerHTML = 'Resume Game';
             } else {
@@ -300,14 +306,14 @@ class Game {
         
         
         if (this.inGame && !this.isPaused && !this.gameOver) {
-            this.score = Math.floor(this.gameTimer.getElapsedTime() * 100)
+            this.score += 1;
             this.scoreEle.innerHTML = `${this.score}`;
             // if we do it this way it'll add a car on every frame update
-            // setInterval(this.peds.newCar(this.score), 1000);
+            // setInterval(this.peds.newCar(this.score), 4000);
 
             switch(this.score) {
                 case 100:
-                    this.scene.add(this.peds.cars[0]);
+                    this.peds.newCar();
                     break;
                 case 1000: // score amount to add a new car
                     this.peds.newCar(); // can make this dynamic later by specifying car type, will also help scale difficulty
@@ -319,6 +325,33 @@ class Game {
                     this.peds.newCar();
                     break;
                 case 8000:
+                    this.peds.newCar();
+                    break;
+                case 10000:
+                    this.peds.newCar();
+                    this.peds.newCar();
+                    break;
+                case 15000:
+                    this.peds.newCar();
+                    this.peds.newCar();
+                    break;
+                case 20000:
+                    this.peds.newCar();
+                    this.peds.newCar();
+                    break;
+                case 27000:
+                    this.peds.newCar();
+                    this.peds.newCar();
+                    this.peds.newCar();
+                    break;
+                case 32000:
+                    this.peds.newCar();
+                    this.peds.newCar();
+                    this.peds.newCar();
+                    break;
+                case 37000:
+                    this.peds.newCar();
+                    this.peds.newCar();
                     this.peds.newCar();
                     break;
             }
@@ -352,8 +385,8 @@ class Game {
                     // Logic for once the game is over
                     this.controls.unlock();
                     this.camera.position.set((that.playerCar.position.x) , 2.0, (that.playerCar.position.z - 2.0));
-                    this.textMesh.position.set((that.playerCar.position.x + 0.6) , (that.playerCar.position.y + 1.5), (that.playerCar.position.z + 2.0))
-                    this.scene.add( this.textMesh, this.titleText )
+                    this.textMesh.position.set((that.playerCar.position.x + 0.6) , (that.playerCar.position.y + 1.5), (that.playerCar.position.z + 2.0));
+                    this.scene.add( this.textMesh, this.titleText );
                    
                 }
             };
@@ -421,6 +454,18 @@ class Game {
                 this.scene.add( this.textMesh );
             } else if (this.textMesh === intersects[0].object) { // once user clicks drive
                 // reset the position of ped cars and go to game camera
+                if (this.gameOver) {
+                    this.score = 0;
+                    this.sound.stop();
+                    for (let i = 0; i < this.peds.cars.length; i++) {
+                        this.scene.remove(this.peds.cars[i])
+                    }
+        
+                    for (let i = 0; i < this.peds.cars.length; i++) {
+                        this.peds.cars.pop();
+                        this.peds.boxGeoms.pop();
+                    }
+                };
                 this.peds.reset();
                 this.updateCamera();
             } else if (this.gitText === intersects[0].object) {
