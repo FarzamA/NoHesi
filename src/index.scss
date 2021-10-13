@@ -22,6 +22,14 @@
     display: block;
 }
 
+// img {
+//     position: fixed;
+//     width: auto;
+//     height: auto;
+//     opacity: 0.5;
+//     filter: grayscale(100%);
+// }
+
 .menu {
     display: flex;
     flex-direction: column;
@@ -58,6 +66,18 @@ ul li {
 
 #hint {
     font-size: 20px;
+}
+
+.crosshair {
+    display: none;
+    justify-content: center;
+    bottom: 42.5%;
+    right: 44.5%;
+    width: 200px;
+    height: 120px;
+    opacity: 0.5;
+    filter: grayscale(100);
+    position: fixed;
 }
 
 

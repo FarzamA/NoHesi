@@ -162,6 +162,7 @@ class Game {
         const that = this; // Preserving scope
 
         const menu = document.querySelector(".menu");
+        const crosshair = document.querySelector(".crosshair");
         const startButton = document.querySelector("#start-button");
         
         
@@ -174,6 +175,9 @@ class Game {
         // need this in order to be able to focus in and out of start menu 
         this.controls.addEventListener('lock', function() {
             // menu.style.display = 'none';
+            if (!that.inGame || that.gameOver) {
+                crosshair.style.display = 'flex';
+            }
             that.score += that.gameTimer.getDelta();
             that.gameTimer.start();
             menu.classList.add('hidden');
@@ -183,6 +187,7 @@ class Game {
         }); 
         this.controls.addEventListener('unlock', function() {
             // menu.style.display = 'block';
+            crosshair.style.display = 'none';
             that.gameTimer.stop();
             if (!that.gameOver) {
                 const button = document.getElementById("start-button").innerHTML = 'Resume Game';
@@ -373,7 +378,7 @@ class Game {
                     this.peds.cars[i].position.z = rando2; 
                     this.peds.cars[i].position.x = rando;
                 } else {
-                    this.peds.cars[i].position.z -= 0.75;
+                    this.peds.cars[i].position.z -= 1.0;
                 }
             }
 
@@ -421,7 +426,19 @@ class Game {
         this.raycaster = new THREE.Raycaster();
         this.mouse = new THREE.Vector2();
 
+        
+
         const that = this;
+
+        // const geometry = new THREE.BufferGeometry();
+        // geometry.setAttribute( 'position', new THREE.Float32BufferAttribute( [(( event.clientX / window.innerWidth ) * 2 - 1), (-( event.clientX / window.innerWidth ) * 2 - 1), 10], 3 ) );
+        // const material = new THREE.PointsMaterial( { color: 0x888888 } );
+
+        // const points = new THREE.Points( geometry, material );
+
+        // this.scene.add(points);
+
+       
 
 
         // calculate mouse position in normalized device coordinates
@@ -429,6 +446,12 @@ class Game {
         function onMouseMove( event ) {
             that.mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
             that.mouse.y = -( event.clientY / window.innerWidth ) * 2 + 1;
+            // const ctx = document.querySelector("#cursor").getContext('2d');
+            // ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
+            // ctx.arc(that.mouse.x, that.mouse.y, RADIUS, 0, degToRad(360), true);
+
+            
+            // ctx.fillRect(that.mouse.x, that.mouse.y, 1, 1);
         };
 
         this.render();
@@ -440,8 +463,25 @@ class Game {
     // Handles all logic when something inside the scene is clicked
     render() {
         this.raycaster.setFromCamera( this.mouse, this.camera )
+        // console.log(this.raycaster.ray.direction);
+
+        // const geometry = new THREE.BufferGeometry();
+        // geometry.setAttribute( 'position', new THREE.Float32BufferAttribute( this.raycaster.ray.origin, 3 ) );
+        // const material = new THREE.PointsMaterial( { color: 0x888888 } );
+
+        // const point = new THREE.Points( geometry, material )
+
+        // this.scene.add( point )
 
         const intersects = this.raycaster.intersectObjects( this.scene.children );
+
+        // for (let i = 0; i < intersects.length; i++) {
+        //     // You can do anything you want here, this is just an example to make the hovered object transparent
+        //     const newMaterial = intersects[i].object.material.clone();
+        //     newMaterial.transparent = true;
+        //     newMaterial.opacity = 0.5;
+        //     intersects[i].object.material = newMaterial;
+        //   }
         
         // the real magic
         if (intersects.length > 0) {
@@ -458,13 +498,13 @@ class Game {
                     this.score = 0;
                     this.sound.stop();
                     for (let i = 0; i < this.peds.cars.length; i++) {
-                        this.scene.remove(this.peds.cars[i])
-                    }
+                        this.scene.remove(this.peds.cars[i]);
+                    };
         
                     for (let i = 0; i < this.peds.cars.length; i++) {
                         this.peds.cars.pop();
                         this.peds.boxGeoms.pop();
-                    }
+                    };
                 };
                 this.peds.reset();
                 this.updateCamera();
@@ -486,9 +526,10 @@ class Game {
         this.camera.lookAt( this.cameraTarget );
         // the parent of the textmesh is the scene which where we want to get rid of it from after click
         this.textMesh.removeFromParent();
-
+        const crosshair = document.querySelector(".crosshair");
         // making a variable to declare game start 
         this.inGame = true;
+        crosshair.style.display = "none"
         this.scene.remove( this.titleText );
         this.peds.reset();
 
