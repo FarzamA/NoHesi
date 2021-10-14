@@ -402,7 +402,6 @@ class Game {
                     this.tree.trees[i].position.z -= 0.10;
                 }
             }
-            // this.tree2.tree.position.z -= 0.01
 
             // Random car spawn after they hit -10 z index
             for (let i = 0; i < this.peds.cars.length; i++) {
@@ -514,7 +513,7 @@ class Game {
                 this.peds.reset();
                 this.updateCamera();
             } else if (this.gitText === intersects[0].object) {
-                window.open("https://github.com/FarzamA/");
+                window.open("https://github.com/FarzamA/NoHesi");
             } else if (this.linkedText === intersects[0].object) {
                 window.open("https://www.linkedin.com/in/farzam-ahmad-41b024154/");
             };
