@@ -6,6 +6,7 @@ import { TextGeometry } from "three/examples/jsm/geometries/TextGeometry";
 import Skybox from "./skybox";
 import Peds from "./pedcars";
 import Sound from "./sounds";
+import Tree from "./trees";
 
 
 // Game class to hold all game logic
@@ -32,6 +33,9 @@ class Game {
         this.plane();
         //Create Cars
         this.road();
+        this.tree = new Tree(this.scene, 18.5);
+        this.populated = false;
+        // this.populate();
         //Create Ped Cars
         this.peds = new Peds(this.scene);
         // Setup Controls
@@ -47,6 +51,16 @@ class Game {
         // Implement soundtrack 
         this.sound = new Sound("track1.mp3");
 
+    }
+
+    populate() {
+        // for (let i = 0; i < 10; i++) {
+            this.tree.newTree(18.5);
+            this.tree.newTree(-18.5);
+
+            // this.peds.newCar();
+            // this.scene.remove(this.peds.cars[-1]);
+        // }
     }
     
     init() {
@@ -296,6 +310,14 @@ class Game {
         const that = this;
         requestAnimationFrame( function() { that.animate() } );
 
+        if (!this.populated) {
+            // setInterval(() => {
+                this.peds.newCar();
+                this.populate()
+                this.populated = true;
+            // }, 2000); 
+        }
+
         // Declaring outside if statement below bc used by multiple functions
         const time = this.clock.getElapsedTime();
         
@@ -318,6 +340,7 @@ class Game {
 
             switch(this.score) {
                 case 100:
+                    if (this.populated)
                     this.peds.newCar();
                     break;
                 case 1000: // score amount to add a new car
@@ -363,6 +386,14 @@ class Game {
     
             this.skybox.box.rotation.x += (Math.cos(time) * 0.0001);
             this.plane.rotation.y += 0.01;
+            for (let i = 0; i < this.tree.trees.length; i++) {
+                if (this.tree.trees[i].position.z < -30 ) {
+                    this.tree.trees[i].position.z = 350;
+                } else {
+                    this.tree.trees[i].position.z -= 0.10;
+                }
+            }
+            // this.tree2.tree.position.z -= 0.01
 
             // Random car spawn after they hit -10 z index
             for (let i = 0; i < this.peds.cars.length; i++) {
@@ -538,6 +569,7 @@ class Game {
         // }
         // this.peds = new Peds(this.scene);
         this.gameOver = false; 
+        // this.peds.newCar();
         this.gameTimer.start();
 
         this.sound.play();
@@ -583,7 +615,7 @@ class Game {
             that.titleText = new THREE.Mesh( titleGeo, materials );
             that.titleText.castShadow = true;
 
-            that.titleText.position.set(18, 5, 100);
+            that.titleText.position.set(18, 15, 100);
             that.titleText.rotateY(-Math.PI)
 
 
