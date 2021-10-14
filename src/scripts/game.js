@@ -50,7 +50,6 @@ class Game {
         htmlEle.appendChild(this.scoreEle);
         // Implement soundtrack 
         this.sound = new Sound("track1.mp3");
-
     }
     
     init() {
@@ -165,7 +164,6 @@ class Game {
             that.tree.newTree(18.5);
             that.tree.newTree(-18.5);
             that.peds.newCar();
-            // that.scene.remove(that.peds.cars[0]);
         }, 2000)
     };
 
@@ -344,7 +342,6 @@ class Game {
             this.scoreEle.innerHTML = `${this.score}`;
             // if we do it this way it'll add a car on every frame update
             // setInterval(this.peds.newCar(this.score), 4000);
-
             switch(this.score) {
                 case 100:
                     if (this.populated)
