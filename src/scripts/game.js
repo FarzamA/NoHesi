@@ -54,13 +54,13 @@ class Game {
     }
 
     populate() {
-        // for (let i = 0; i < 10; i++) {
-            this.tree.newTree(18.5);
-            this.tree.newTree(-18.5);
-
-            // this.peds.newCar();
-            // this.scene.remove(this.peds.cars[-1]);
-        // }
+        const that = this;
+        // prevents console errors
+        setTimeout(() => {
+            console.log('tree made')
+            that.tree.newTree(18.5);
+            that.tree.newTree(-18.5);
+        }, 2000)
     }
     
     init() {

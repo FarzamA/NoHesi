@@ -5,6 +5,7 @@ class Tree {
         this.scene = scene; 
         this.pos = pos;
         this.trees = [];
+        this.loaded = false;
         this.init();
     }
 
@@ -54,6 +55,7 @@ class Tree {
             },
             // Boilerplate
             function(xhr) {
+                this.loaded = true;
                 console.log((xhr.loaded/xhr.total * 100) + "% Loaded");
             }, function(error) {
                 console.error(error);
@@ -73,17 +75,25 @@ class Tree {
         // const max = Math.floor(200);
         // const random = Math.floor((Math.random() * (max - min) + min));
 
-        console.log(this.tree);
-        // if (this.tree) {
+        // console.log(this.tree.name);
+        // if (this.tree && this.tree.name === 'Scene') {
+            // return 
+        // } else {
+        // try {
             for (let i = 1; i < 11; i++) {
-                
-                const clone = this.tree.clone();
-                // this.treesArr.push(clone);
-                clone.position.set(pos, 0.3, (i * 50));
-                this.scene.add(clone);
-                this.trees.push(clone);
+                    const clone = this.tree.clone();
+                    // this.treesArr.push(clone);
+                    clone.position.set(pos, 0.3, (i * 50));
+                    this.scene.add(clone);
+                    this.trees.push(clone);
                 
             }
+        // }
+        // catch(e) {
+
+        //     this.newTree();
+           
+        // }
         // };
     }
 };
