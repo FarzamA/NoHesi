@@ -125,10 +125,6 @@ class Game {
         // Trying to mess around with shadows
         this.spotLight = new THREE.SpotLight(pointLightColor, 2);
         this.spotLight.castShadow = true;
-
-
-        // Create ambient lighting
-        // const ambient = new THREE.AmbientLight( 0x707070, 0.6 );
         
         // Hemisphere light (neccesary to show color on text)
         const hemi = new THREE.HemisphereLight(0xffeeb1, 0x80820, 4)
@@ -189,7 +185,6 @@ class Game {
 
         // need this in order to be able to focus in and out of start menu 
         this.controls.addEventListener('lock', function() {
-            // menu.style.display = 'none';
             if (!that.inGame || that.gameOver) {
                 crosshair.style.display = 'flex';
             }
@@ -201,7 +196,6 @@ class Game {
             that.isPaused = false;
         }); 
         this.controls.addEventListener('unlock', function() {
-            // menu.style.display = 'block';
             crosshair.style.display = 'none';
             that.gameTimer.stop();
             if (!that.gameOver) {
@@ -472,32 +466,13 @@ class Game {
         this.raycaster = new THREE.Raycaster();
         this.mouse = new THREE.Vector2();
 
-        
-
-        const that = this;
-
-        // const geometry = new THREE.BufferGeometry();
-        // geometry.setAttribute( 'position', new THREE.Float32BufferAttribute( [(( event.clientX / window.innerWidth ) * 2 - 1), (-( event.clientX / window.innerWidth ) * 2 - 1), 10], 3 ) );
-        // const material = new THREE.PointsMaterial( { color: 0x888888 } );
-
-        // const points = new THREE.Points( geometry, material );
-
-        // this.scene.add(points);
-
-       
-
+        const that = this;      
 
         // calculate mouse position in normalized device coordinates
 	    // (-1 to +1) for both components
         function onMouseMove( event ) {
             that.mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
             that.mouse.y = -( event.clientY / window.innerWidth ) * 2 + 1;
-            // const ctx = document.querySelector("#cursor").getContext('2d');
-            // ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
-            // ctx.arc(that.mouse.x, that.mouse.y, RADIUS, 0, degToRad(360), true);
-
-            
-            // ctx.fillRect(that.mouse.x, that.mouse.y, 1, 1);
         };
 
         this.render();
@@ -509,26 +484,9 @@ class Game {
     // Handles all logic when something inside the scene is clicked
     render() {
         this.raycaster.setFromCamera( this.mouse, this.camera )
-        // console.log(this.raycaster.ray.direction);
-
-        // const geometry = new THREE.BufferGeometry();
-        // geometry.setAttribute( 'position', new THREE.Float32BufferAttribute( this.raycaster.ray.origin, 3 ) );
-        // const material = new THREE.PointsMaterial( { color: 0x888888 } );
-
-        // const point = new THREE.Points( geometry, material )
-
-        // this.scene.add( point )
-
+      
         const intersects = this.raycaster.intersectObjects( this.scene.children );
 
-        // for (let i = 0; i < intersects.length; i++) {
-        //     // You can do anything you want here, this is just an example to make the hovered object transparent
-        //     const newMaterial = intersects[i].object.material.clone();
-        //     newMaterial.transparent = true;
-        //     newMaterial.opacity = 0.5;
-        //     intersects[i].object.material = newMaterial;
-        //   }
-        
         // the real magic
         if (intersects.length > 0) {
             if ( (intersects[0].object.parent.parent) && (this.playerCar.children.includes(intersects[0].object.parent.parent.parent.parent)) ) {
@@ -580,12 +538,7 @@ class Game {
         this.scene.remove( this.titleText );
         this.peds.reset();
 
-        // for (let i = 1; i < this.peds.cars.length; i++) {
-        //     this.scene.remove( this.peds.cars[i] );
-        // }
-        // this.peds = new Peds(this.scene);
         this.gameOver = false; 
-        // this.peds.newCar();
         this.gameTimer.start();
 
         this.sound.play();
