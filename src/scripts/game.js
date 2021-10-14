@@ -615,7 +615,7 @@ class Game {
             that.titleText = new THREE.Mesh( titleGeo, materials );
             that.titleText.castShadow = true;
 
-            that.titleText.position.set(18, 15, 100);
+            that.titleText.position.set(18, 15, 15);
             that.titleText.rotateY(-Math.PI)
 
 
