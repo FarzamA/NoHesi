@@ -19,9 +19,7 @@ In addition, this project will include:
 ![Splash-Screen](https://cdn.discordapp.com/attachments/747021191067205682/898198564554043422/Screenshot_122.png)
 ![Intro-Screen](https://cdn.discordapp.com/attachments/747021191067205682/898198917487951902/Screenshot_123.png)
 ![Interactable](https://cdn.discordapp.com/attachments/747021191067205682/898199441805299752/Screenshot_124.png)
-* Interactable menus/links
 ![Score](https://cdn.discordapp.com/attachments/747021191067205682/898199442849685554/Screenshot_125.png)
-* Score auto updates/pauses at correct times
 
 ## Wireframes
 ![Wireframe](https://cdn.discordapp.com/attachments/747021191067205682/895781707268104252/Screenshot_116.png)
