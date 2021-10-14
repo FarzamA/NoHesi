@@ -52,17 +52,6 @@ class Game {
         this.sound = new Sound("track1.mp3");
 
     }
-
-    populate() {
-        const that = this;
-        // prevents console errors
-        setTimeout(() => {
-            that.tree.newTree(18.5);
-            that.tree.newTree(-18.5);
-            that.peds.newCar();
-            // that.scene.remove(that.peds.cars[0]);
-        }, 2000)
-    }
     
     init() {
         // Create scene to be rendered later
@@ -147,7 +136,7 @@ class Game {
         this.plane = new THREE.Mesh( geometry, material );
 
         this.scene.add( this.plane );
-    }
+    };
 
     // Create Road
     road() {
@@ -167,7 +156,18 @@ class Game {
         road.position.set(-0.5, 0.3, 0);
 
         this.scene.add( road );
-    }
+    };
+
+    populate() {
+        const that = this;
+        // prevents console errors
+        setTimeout(() => {
+            that.tree.newTree(18.5);
+            that.tree.newTree(-18.5);
+            that.peds.newCar();
+            // that.scene.remove(that.peds.cars[0]);
+        }, 2000)
+    };
 
     setupControls() {
         const that = this; // Preserving scope
@@ -272,7 +272,7 @@ class Game {
         };
 
         document.addEventListener('keydown', onKeyDown, false);
-    }
+    };
 
     // Choosing to utilize GLTFLoader to work with assets
     loadAssets() {
@@ -311,10 +311,8 @@ class Game {
                 console.log((xhr.loaded/xhr.total * 100) + "% Loaded");
             }, function(error) {
                 console.error(error);
-            });
-
-           
-    }
+            }); 
+    };
 
     // Game loop + allows for things to easily move on screen
     animate() {
@@ -325,7 +323,7 @@ class Game {
         if (!this.populated) {
             this.populate()
             this.populated = true;
-        }
+        };
 
         // Declaring outside if statement below bc used by multiple functions
         const time = this.clock.getElapsedTime();
@@ -418,8 +416,8 @@ class Game {
                     this.peds.cars[i].position.x = rando;
                 } else {
                     this.peds.cars[i].position.z -= 1.0;
-                }
-            }
+                };
+            };
 
             this.updateColliders();
 
@@ -431,22 +429,21 @@ class Game {
                     this.camera.position.set((that.playerCar.position.x) , 2.0, (that.playerCar.position.z - 2.0));
                     this.textMesh.position.set((that.playerCar.position.x + 0.6) , (that.playerCar.position.y + 1.5), (that.playerCar.position.z + 2.0));
                     this.scene.add( this.textMesh, this.titleText );
-                   
-                }
+                };
             };
 
             if (this.gameOver) {
                 this.sound.stop();
                 for (let i = 0; i < this.peds.cars.length; i++) {
                     this.scene.remove(this.peds.cars[i])
-                }
+                };
     
                 for (let i = 0; i < this.peds.cars.length; i++) {
                     this.peds.cars.pop();
                     this.peds.boxGeoms.pop();
-                }
+                };
             };
-        }
+        };
 
         this.renderer.render ( this.scene, this.camera );
     };
@@ -458,7 +455,7 @@ class Game {
         for (let i = 0; i < this.peds.boxGeoms.length; i++) {
             this.peds.boxGeoms[i].setFromObject(this.peds.cars[i]);
         };
-    }
+    };
 
      //Raycasting for selection of specific objects
     rayCast( event ) {
@@ -517,7 +514,7 @@ class Game {
             } else if (this.linkedText === intersects[0].object) {
                 window.open("https://www.linkedin.com/in/farzam-ahmad-41b024154/");
             };
-        }
+        };
 
         this.renderer.render( this.scene, this.camera );
     };
@@ -541,7 +538,7 @@ class Game {
         this.gameTimer.start();
 
         this.sound.play();
-    }
+    };
 
     createText() {
         const loader = new FontLoader(); 
@@ -610,7 +607,7 @@ class Game {
         },  function(load) {
             console.log((load.loaded/load.total * 100) + "% Loaded");
         });
-    }
+    };
 };
 
 export default Game;
