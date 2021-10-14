@@ -222,7 +222,10 @@ class Game {
                         that.controls.moveForward(0.25);
                     } else if (!that.gameOver) {
                         if (that.playerCar.position.z < 5) {
-                            that.playerCar.position.z += 0.5;
+                            that.playerCar.position.z += 0.25;
+                            if (that.playerCar.rotation.x > -0.2) {
+                                that.playerCar.rotation.x -= 0.05;
+                            }
                         };
                     };
                     break; 
@@ -231,7 +234,15 @@ class Game {
                         that.controls.moveRight(-0.25);
                     } else if (!that.gameOver) {
                         if (that.playerCar.position.x < 10.5) {
-                            that.playerCar.position.x += 0.5;
+                            that.playerCar.position.x += 0.25;
+                            if (that.playerCar.rotation.y < 0.2) {
+                                that.playerCar.rotation.y += 0.05;
+                            } else {
+                                setInterval( () => {
+                                    that.playerCar.rotation.y = 0;
+                                }, 4000)
+                                
+                            }
                         };
                     };
                     break;
@@ -240,7 +251,10 @@ class Game {
                         that.controls.moveForward(-0.25);
                     } else if (!that.gameOver) {
                         if (that.playerCar.position.z > -5) {
-                            that.playerCar.position.z -= 0.5;
+                            that.playerCar.position.z -= 0.25;
+                            if (that.playerCar.rotation.x < 0) {
+                                that.playerCar.rotation.x += 0.05;
+                            }
                         }
                     };
                     break;
@@ -249,7 +263,10 @@ class Game {
                         that.controls.moveRight(0.25);
                     } else if (!that.gameOver) {
                         if (that.playerCar.position.x > -10.5) {
-                            that.playerCar.position.x -= 0.5;
+                            that.playerCar.position.x -= 0.25;
+                            if (that.playerCar.rotation.y > -0.2) {
+                                that.playerCar.rotation.y -= 0.05;
+                            }
                         }
                     };
                     break;
@@ -387,7 +404,7 @@ class Game {
             this.skybox.box.rotation.x += (Math.cos(time) * 0.0001);
             this.plane.rotation.y += 0.01;
             for (let i = 0; i < this.tree.trees.length; i++) {
-                if (this.tree.trees[i].position.z < -30 ) {
+                if (this.tree.trees[i].position.z < -50 ) {
                     this.tree.trees[i].position.z = 350;
                 } else {
                     this.tree.trees[i].position.z -= 0.10;

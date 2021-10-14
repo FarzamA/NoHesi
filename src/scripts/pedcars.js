@@ -74,11 +74,13 @@ class Peds {
     }
 
     newCar() {
-        const clone = this.pedCar.clone();
-        this.cars.push(clone);
-        const boxClone = new THREE.Box3().setFromObject(clone);
-        this.boxGeoms.push(boxClone);
-        this.scene.add( clone );
+        if (this.pedCar) {
+            const clone = this.pedCar.clone();
+            this.cars.push(clone);
+            const boxClone = new THREE.Box3().setFromObject(clone);
+            this.boxGeoms.push(boxClone);
+            this.scene.add( clone );
+        }
     }
 
     reset() {
