@@ -57,9 +57,10 @@ class Game {
         const that = this;
         // prevents console errors
         setTimeout(() => {
-            console.log('tree made')
             that.tree.newTree(18.5);
             that.tree.newTree(-18.5);
+            that.peds.newCar();
+            // that.scene.remove(that.peds.cars[0]);
         }, 2000)
     }
     
@@ -328,11 +329,8 @@ class Game {
         requestAnimationFrame( function() { that.animate() } );
 
         if (!this.populated) {
-            // setInterval(() => {
-                this.peds.newCar();
-                this.populate()
-                this.populated = true;
-            // }, 2000); 
+            this.populate()
+            this.populated = true;
         }
 
         // Declaring outside if statement below bc used by multiple functions
@@ -414,7 +412,7 @@ class Game {
 
             // Random car spawn after they hit -10 z index
             for (let i = 0; i < this.peds.cars.length; i++) {
-                if (this.peds.cars[i].position.z < -10) {
+                if (this.peds.cars[i].position.z < -17) {
                     const min = Math.floor(-20);
                     const max = Math.floor(5);
                     const rando = Math.floor((Math.random() * (max - min) + min));
@@ -553,6 +551,7 @@ class Game {
                         this.peds.cars.pop();
                         this.peds.boxGeoms.pop();
                     };
+                    this.peds.newCar();
                 };
                 this.peds.reset();
                 this.updateCamera();
