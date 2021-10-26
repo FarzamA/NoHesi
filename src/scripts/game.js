@@ -399,7 +399,7 @@ class Game {
                 }
             }
 
-            // Random car spawn after they hit -10 z index
+            // Random car spawn after they hit -17 z index
             for (let i = 0; i < this.peds.cars.length; i++) {
                 if (this.peds.cars[i].position.z < -17) {
                     const min = Math.floor(-20);
@@ -407,7 +407,7 @@ class Game {
                     const rando = Math.floor((Math.random() * (max - min) + min));
 
                     // Prevents car from spawning too close to player before they reach a certain score
-                    const min2;
+                    let min2;
                     if (this.score > 4000) { 
                         min2 = Math.floor(250);
                     }else {
