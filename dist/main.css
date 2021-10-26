@@ -94,6 +94,7 @@ table {
 }
 
 #start-button:hover {
+  transform: scale(1.5);
   cursor: pointer;
 }
 
