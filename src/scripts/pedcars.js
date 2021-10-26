@@ -19,8 +19,8 @@ class Peds {
             const max = Math.floor(5);
             const rando = Math.floor((Math.random() * (max - min) + min));
 
-            const min2 = Math.floor(100);
-            const max2 = Math.floor(450);
+            const min2 = Math.floor(400);
+            const max2 = Math.floor(600);
             const rando2 = Math.floor((Math.random() * (max2 - min2) + min2));
             that.pedCar.recieveShadow = true; 
             that.pedCar.scale.set(0.015, 0.015, 0.015);

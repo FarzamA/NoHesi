@@ -406,8 +406,14 @@ class Game {
                     const max = Math.floor(5);
                     const rando = Math.floor((Math.random() * (max - min) + min));
 
-                    const min2 = Math.floor(200);
-                    const max2 = Math.floor(450);
+                    // Prevents car from spawning too close to player before they reach a certain score
+                    const min2;
+                    if (this.score > 4000) { 
+                        min2 = Math.floor(250);
+                    }else {
+                        min2 = Math.floor(400);
+                    }
+                    const max2 = Math.floor(600);
                     const rando2 = Math.floor((Math.random() * (max2 - min2) + min2));
 
                     this.peds.cars[i].position.z = rando2; 
@@ -456,7 +462,7 @@ class Game {
     };
 
      //Raycasting for selection of specific objects
-    rayCast( event ) {
+    rayCast() {
         this.raycaster = new THREE.Raycaster();
         this.mouse = new THREE.Vector2();
 
