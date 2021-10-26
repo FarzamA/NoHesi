@@ -305,11 +305,12 @@ class Game {
                 
             },
             // Boilerplate
-            function(xhr) {
-                console.log((xhr.loaded/xhr.total * 100) + "% Loaded");
-            }, function(error) {
-                console.error(error);
-            }); 
+            // function(xhr) {
+            //     console.log((xhr.loaded/xhr.total * 100) + "% Loaded");
+            // }, function(error) {
+            //     console.error(error);
+            // }
+            ); 
     };
 
     // Game loop + allows for things to easily move on screen
@@ -601,9 +602,11 @@ class Game {
             that.scene.add( that.gitText, that.linkedText, that.titleText );
             
 
-        },  function(load) {
-            console.log((load.loaded/load.total * 100) + "% Loaded");
-        });
+        },
+        // function(load) {
+        //     console.log((load.loaded/load.total * 100) + "% Loaded");
+        // }
+        );
     };
 };
 

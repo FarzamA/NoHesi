@@ -28,11 +28,12 @@ class Tree {
             });
         },
         // Boilerplate
-        function(xhr) {
-            console.log((xhr.loaded/xhr.total * 100) + "% Loaded");
-        }, function(error) {
-            console.error(error);
-        });
+        // function(xhr) {
+        //     // console.log((xhr.loaded/xhr.total * 100) + "% Loaded");
+        // }, function(error) {
+        //     // console.error(error);
+        // }
+        );
     };
 
     newTree( pos ) {
