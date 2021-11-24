@@ -516,7 +516,7 @@ class Game {
             } else if (this.gitText === intersects[0].object) {
                 window.open("https://github.com/FarzamA/NoHesi");
             } else if (this.linkedText === intersects[0].object) {
-                window.open("https://www.linkedin.com/in/farzam-ahmad-41b024154/");
+                window.open("https://www.linkedin.com/in/farzamahmad/");
             };
         };
 
