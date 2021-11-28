@@ -20,6 +20,8 @@ class Game {
         this.isPaused = false;
         // Handles boilerplate scene/camera/renderer
         this.init();
+        // Setup modal functionality
+        this.modal();
         // Create new skybox (images are 1024 x 1024 for 'retrosun')
         this.skybox = new Skybox(1000, 1000, 1000, 'retrosun');
         this.scene.add( this.skybox.box );
@@ -46,7 +48,7 @@ class Game {
         // Implement score
         this.gameTimer = new THREE.Clock();
         this.score = 0;
-        this.scoreEle = document.createElement("p");
+        this.scoreEle = document.createElement("span");
         const htmlEle = document.querySelector("#score");
         htmlEle.appendChild(this.scoreEle);
         // Implement soundtrack 
@@ -88,6 +90,38 @@ class Game {
         // Deal with clicking things within the scene itself
         this.renderer.domElement.addEventListener('click', this.rayCast.bind(this), false); 
     };
+
+    modal() {
+        const modal = document.getElementById("myModal");
+        const btn = document.getElementById("myBtn");
+        const span = document.getElementsByClassName("close")[0];
+        const next = document.getElementById("next");
+        const prev = document.getElementById('prev');
+
+        btn.onclick = function() {
+            modal.style.display = "block";
+        }
+
+        span.onclick = function() {
+            modal.style.display = "none";
+        }
+
+        next.addEventListener("click", function() {
+            document.getElementById('instructions-1').style.display = 'none';
+            document.getElementById('instructions-2').style.display = 'block';
+        }, false);
+
+        prev.addEventListener("click", function() {
+            document.getElementById('instructions-1').style.display = 'block';
+            document.getElementById('instructions-2').style.display = 'none';
+        }, false);
+
+        window.onclick = function(event) {
+            if (event.target == modal) {
+              modal.style.display = "none";
+            }
+        }
+    }
 
     
     // Attempt to Create lighting
@@ -215,7 +249,7 @@ class Game {
                 case "KeyW":
                     if ((!that.inGame || that.gameOver) && that.controls.isLocked) {
                         that.controls.moveForward(0.25);
-                    } else if (!that.gameOver && !that.isPaused) {
+                    } else if (!that.gameOver && !that.isPaused && that.inGame) {
                         if (that.playerCar.position.z < 5) {
                             that.playerCar.position.z += 0.25;
                             if (that.playerCar.rotation.x > -0.2) {
@@ -227,7 +261,7 @@ class Game {
                 case "KeyA":
                     if ((!that.inGame || that.gameOver) && that.controls.isLocked) {
                         that.controls.moveRight(-0.25);
-                    } else if (!that.gameOver && !that.isPaused) {
+                    } else if (!that.gameOver && !that.isPaused && that.inGame) {
                         if (that.playerCar.position.x < 10.5) {
                             that.playerCar.position.x += 0.25;
                             if (that.playerCar.rotation.y < 0.2) {
@@ -244,7 +278,7 @@ class Game {
                 case "KeyS":
                     if ((!that.inGame || that.gameOver) && that.controls.isLocked) {
                         that.controls.moveForward(-0.25);
-                    } else if (!that.gameOver && !that.isPaused) {
+                    } else if (!that.gameOver && !that.isPaused && that.inGame) {
                         if (that.playerCar.position.z > -5) {
                             that.playerCar.position.z -= 0.25;
                             if (that.playerCar.rotation.x < 0) {
@@ -256,7 +290,7 @@ class Game {
                 case "KeyD":
                     if ((!that.inGame || that.gameOver) && that.controls.isLocked) {
                         that.controls.moveRight(0.25);
-                    } else if (!that.gameOver && !that.isPaused) {
+                    } else if (!that.gameOver && !that.isPaused && that.inGame) {
                         if (that.playerCar.position.x > -10.5) {
                             that.playerCar.position.x -= 0.25;
                             if (that.playerCar.rotation.y > -0.2) {
@@ -272,6 +306,10 @@ class Game {
         };
 
         document.addEventListener('keydown', onKeyDown, false);
+
+
+
+       
     };
 
     // Choosing to utilize GLTFLoader to work with assets
@@ -338,9 +376,11 @@ class Game {
         
         // Weird bug where everything still becomes out of position over time
         if (this.textMesh) {
-            this.textMesh.position.y += (Math.cos(time) * 0.0002) ;
-            this.gitText.position.y += (Math.cos(time) * 0.0002);
-            this.linkedText.position.y += (Math.cos(time) * 0.0002);
+            this.textMesh.position.y += (Math.cos(time) * 0.002) ;
+            this.gitText.position.y += (Math.cos(time) * 0.002);
+            this.angelText.position.y += (Math.cos(time) * 0.002);
+            this.portfolioText.position.y += (Math.cos(time) * 0.002);
+            this.linkedText.position.y += (Math.cos(time) * 0.002);
             this.titleText.position.y += (Math.cos(time) * 0.01);
         };
 
@@ -523,9 +563,13 @@ class Game {
                 this.peds.reset();
                 this.updateCamera();
             } else if (this.gitText === intersects[0].object) {
-                window.open("https://github.com/FarzamA/NoHesi");
+                window.open("https://github.com/FarzamA/");
             } else if (this.linkedText === intersects[0].object) {
                 window.open("https://www.linkedin.com/in/farzamahmad/");
+            } else if (this.angelText === intersects[0].object) {
+                window.open("https://angel.co/u/farzam-ahmad");
+            } else if (this.portfolioText === intersects[0].object) {
+                window.open("https://farzama.github.io/");
             };
         };
 
@@ -576,6 +620,18 @@ class Game {
                 height: 0.15
             });
 
+            const angelGeo = new TextGeometry ('ANGEL LIST', {
+                font: font,
+                size: 0.7,
+                height: 0.15
+            });
+
+            const portfolioGeo = new TextGeometry ('PORTFOLIO', {
+                font: font,
+                size: 0.7,
+                height: 0.15
+            });
+
             const geometry = new TextGeometry('DRIVE', {
                 font: font, 
                 size: 0.7, 
@@ -609,12 +665,24 @@ class Game {
             that.linkedText.position.set(-15.7, 1.3, 0);
             that.linkedText.rotateY(Math.PI*0.5)
 
+            that.angelText = new THREE.Mesh( angelGeo, materials );
+            that.angelText.castShadow = true;
+
+            that.angelText.position.set(-15.7, 0.6, 0);
+            that.angelText.rotateY(Math.PI*0.5)
+
+            that.portfolioText = new THREE.Mesh( portfolioGeo, materials );
+            that.portfolioText.castShadow = true;
+
+            that.portfolioText.position.set(-15.7, 2.7, 0);
+            that.portfolioText.rotateY(Math.PI*0.5)
+
             that.textMesh = new THREE.Mesh( geometry, materials );
             that.textMesh.castShadow = true;
 
             that.textMesh.rotateY(Math.PI * 0.5);
 
-            that.scene.add( that.gitText, that.linkedText, that.titleText );
+            that.scene.add( that.gitText, that.linkedText, that.titleText, that.angelText, that.portfolioText );
             
 
         },

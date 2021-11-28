@@ -27,12 +27,35 @@
     <div id="score"></div>
     <div class="menu">
         <p id="start-button">Start Game</p>
-        <ul id="instructions">
-            <li>Move: WASD</li>
-            <li>Look: MOUSE</li>
-            <li>Mute: M</li>
-            <li id="hint">Hint: Click the car</li>
-        </ul>
+            <!-- Trigger button for the modal -->
+            <p id="myBtn">Instructions</p>
+
+        <div id="myModal" class="modal">
+
+            <!-- Modal content -->
+            <div class="modal-content">
+              <span class="close">&times;</span>
+              <h1>How to play:</h1>
+                <ul id="instructions-1">
+                    <li>Move: WASD</li>
+                    <li>Look: MOUSE</li>
+                    <li>Mute: M</li>
+                    <!-- <li>Hint: Click the car</li> -->
+                    <li id='next'>-></li>
+                </ul>
+                <ul id="instructions-2">
+                    <li>1. Click the car</li>
+                    <img src='https://nohesitation.s3.amazonaws.com/ClickCar.png'>
+                    <li>2. Click Drive</li>
+                    <img src='https://nohesitation.s3.amazonaws.com/ClickDrive.png'>
+                    <li>3. Avoid other cars on the road</li>
+                    <img src='https://nohesitation.s3.amazonaws.com/AvoidCars.png'>
+                    <!-- <li>Hint: Click the car</li> -->
+                    <li id='prev'><-</li>
+                </ul>
+            </div>
+          
+          </div>
     </div>
     <canvas id="game"></canvas>
 </body>

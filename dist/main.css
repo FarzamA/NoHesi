@@ -89,11 +89,27 @@ table {
   display: none;
 }
 
-#start-button {
+p {
   font-size: 75px;
+  /* padding-bottom: 10px; */
 }
 
-#start-button:hover {
+p:last-of-type {
+  padding-top: 25px;
+  font-size: 40px;
+}
+
+/* #myBtn {
+  font-size: 50px;
+}
+
+#my-Btn:hover {
+  transform: scale(1.5);
+  cursor: pointer;
+} */
+
+p:hover {
+  transition: 0.3s;
   transform: scale(1.5);
   cursor: pointer;
 }
@@ -104,6 +120,7 @@ table {
 
 ul li {
   padding-bottom: 20px;
+  padding-top: 20px;
   font-size: 35px;
 }
 
@@ -121,4 +138,69 @@ ul li {
   opacity: 0.5;
   filter: grayscale(100);
   position: fixed;
+}
+
+/* The Modal (background) */
+.modal {
+  display: none; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Sit on top */
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgb(0,0,0); /* Fallback color */
+  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+
+/* Modal Content/Box */
+.modal-content {
+  color: rgb(255, 255, 255);
+  background-color: #0c0022;
+  margin: 15% auto; /* 15% from the top and centered */
+  padding: 20px;
+  border: 1px solid #888;
+  border-radius: 2%;
+  width: 30%; /* Could be more or less, depending on screen size */
+}
+
+ul > img {
+  width: 60%;
+}
+
+/* The Close Button */
+.close {
+  color: rgb(255, 255, 255);
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+  /* color: rgb(255, 255, 255); */
+  text-decoration: none;
+  cursor: pointer;
+  transition: 0.3s;
+  transform: scale(1.5);
+}
+
+h1 {
+  font-size: 50px;
+  cursor: default;
+}
+
+#instructions-2 {
+  display: none;
+}
+
+/* li:last-child {
+  float: right;
+} */
+
+li:last-child:hover {
+  cursor: pointer;
+  transition: 0.3s;
+  transform: scale(2.0);
 }
