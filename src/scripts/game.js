@@ -215,7 +215,7 @@ class Game {
                 case "KeyW":
                     if ((!that.inGame || that.gameOver) && that.controls.isLocked) {
                         that.controls.moveForward(0.25);
-                    } else if (!that.gameOver) {
+                    } else if (!that.gameOver && !that.isPaused) {
                         if (that.playerCar.position.z < 5) {
                             that.playerCar.position.z += 0.25;
                             if (that.playerCar.rotation.x > -0.2) {
@@ -227,7 +227,7 @@ class Game {
                 case "KeyA":
                     if ((!that.inGame || that.gameOver) && that.controls.isLocked) {
                         that.controls.moveRight(-0.25);
-                    } else if (!that.gameOver) {
+                    } else if (!that.gameOver && !that.isPaused) {
                         if (that.playerCar.position.x < 10.5) {
                             that.playerCar.position.x += 0.25;
                             if (that.playerCar.rotation.y < 0.2) {
@@ -244,7 +244,7 @@ class Game {
                 case "KeyS":
                     if ((!that.inGame || that.gameOver) && that.controls.isLocked) {
                         that.controls.moveForward(-0.25);
-                    } else if (!that.gameOver) {
+                    } else if (!that.gameOver && !that.isPaused) {
                         if (that.playerCar.position.z > -5) {
                             that.playerCar.position.z -= 0.25;
                             if (that.playerCar.rotation.x < 0) {
@@ -256,7 +256,7 @@ class Game {
                 case "KeyD":
                     if ((!that.inGame || that.gameOver) && that.controls.isLocked) {
                         that.controls.moveRight(0.25);
-                    } else if (!that.gameOver) {
+                    } else if (!that.gameOver && !that.isPaused) {
                         if (that.playerCar.position.x > -10.5) {
                             that.playerCar.position.x -= 0.25;
                             if (that.playerCar.rotation.y > -0.2) {
