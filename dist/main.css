@@ -156,8 +156,8 @@ ul li {
 
 /* Modal Content/Box */
 .modal-content {
-  color: black;
-  background-color: #fefefe;
+  color: rgb(255, 255, 255);
+  background-color: rgb(25, 27, 28);
   margin: 15% auto; /* 15% from the top and centered */
   padding: 20px;
   border: 1px solid #888;
@@ -190,4 +190,10 @@ h1 {
 
 #instructions-2 {
   display: none;
+}
+
+li:last-child:hover {
+  cursor: pointer;
+  transition: 0.3s;
+  transform: scale(2.0);
 }
