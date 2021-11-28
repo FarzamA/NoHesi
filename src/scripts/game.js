@@ -233,9 +233,9 @@ class Game {
             crosshair.style.display = 'none';
             that.gameTimer.stop();
             if (!that.gameOver) {
-                const button = document.getElementById("start-button").innerHTML = 'Resume Game';
+                document.getElementById("start-button").innerHTML = 'Resume Game';
             } else {
-                const button = document.getElementById("start-button").innerHTML = 'Try Again';
+                document.getElementById("start-button").innerHTML = 'Try Again';
             }
             menu.classList.remove('hidden');
             that.isPaused = true;
