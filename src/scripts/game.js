@@ -42,6 +42,7 @@ class Game {
         this.setupControls();
         // In order to get bouncing animation on text
         this.clock = new THREE.Clock();
+        this.then = 0; //units a second
         // Implement score
         this.gameTimer = new THREE.Clock();
         this.score = 0;
@@ -178,6 +179,7 @@ class Game {
         this.controls = new PointerLockControls( this.camera, this.renderer.domElement );
         startButton.addEventListener("click", function() {
             that.controls.lock();
+            // that.updateCamera();
         }, false);
         
 
@@ -317,7 +319,11 @@ class Game {
     animate() {
         //needs to be passed in this way otherwise it won't work 
         const that = this;
-        requestAnimationFrame( function() { that.animate() } );
+
+        setTimeout( function() {
+            requestAnimationFrame( function() { that.animate() } );
+        }, 1000 / 60)
+            
 
         if (!this.populated) {
             this.populate()
@@ -326,10 +332,13 @@ class Game {
 
         // Declaring outside if statement below bc used by multiple functions
         const time = this.clock.getElapsedTime();
+        // const delta = this.clock.getDelta();
+        // console.log(delta);
+        // console.log(time);
         
         // Weird bug where everything still becomes out of position over time
         if (this.textMesh) {
-            this.textMesh.position.y += (Math.cos(time) * 0.0002);
+            this.textMesh.position.y += (Math.cos(time) * 0.0002) ;
             this.gitText.position.y += (Math.cos(time) * 0.0002);
             this.linkedText.position.y += (Math.cos(time) * 0.0002);
             this.titleText.position.y += (Math.cos(time) * 0.01);
@@ -395,7 +404,7 @@ class Game {
                 if (this.tree.trees[i].position.z < -50 ) {
                     this.tree.trees[i].position.z = 350;
                 } else {
-                    this.tree.trees[i].position.z -= 0.10;
+                    this.tree.trees[i].position.z -= 0.40;
                 }
             }
 
@@ -419,7 +428,7 @@ class Game {
                     this.peds.cars[i].position.z = rando2; 
                     this.peds.cars[i].position.x = rando;
                 } else {
-                    this.peds.cars[i].position.z -= 1.0;
+                    this.peds.cars[i].position.z -= 2.0;
                 };
             };
 
@@ -449,7 +458,7 @@ class Game {
             };
         };
 
-        this.renderer.render ( this.scene, this.camera );
+        this.renderer.render( this.scene, this.camera );
     };
 
     updateColliders() {
