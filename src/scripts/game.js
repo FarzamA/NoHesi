@@ -46,7 +46,7 @@ class Game {
         // Implement score
         this.gameTimer = new THREE.Clock();
         this.score = 0;
-        this.scoreEle = document.createElement("p");
+        this.scoreEle = document.createElement("span");
         const htmlEle = document.querySelector("#score");
         htmlEle.appendChild(this.scoreEle);
         // Implement soundtrack 
@@ -215,7 +215,7 @@ class Game {
                 case "KeyW":
                     if ((!that.inGame || that.gameOver) && that.controls.isLocked) {
                         that.controls.moveForward(0.25);
-                    } else if (!that.gameOver && !that.isPaused) {
+                    } else if (!that.gameOver && !that.isPaused && that.inGame) {
                         if (that.playerCar.position.z < 5) {
                             that.playerCar.position.z += 0.25;
                             if (that.playerCar.rotation.x > -0.2) {
@@ -227,7 +227,7 @@ class Game {
                 case "KeyA":
                     if ((!that.inGame || that.gameOver) && that.controls.isLocked) {
                         that.controls.moveRight(-0.25);
-                    } else if (!that.gameOver && !that.isPaused) {
+                    } else if (!that.gameOver && !that.isPaused && that.inGame) {
                         if (that.playerCar.position.x < 10.5) {
                             that.playerCar.position.x += 0.25;
                             if (that.playerCar.rotation.y < 0.2) {
@@ -244,7 +244,7 @@ class Game {
                 case "KeyS":
                     if ((!that.inGame || that.gameOver) && that.controls.isLocked) {
                         that.controls.moveForward(-0.25);
-                    } else if (!that.gameOver && !that.isPaused) {
+                    } else if (!that.gameOver && !that.isPaused && that.inGame) {
                         if (that.playerCar.position.z > -5) {
                             that.playerCar.position.z -= 0.25;
                             if (that.playerCar.rotation.x < 0) {
@@ -256,7 +256,7 @@ class Game {
                 case "KeyD":
                     if ((!that.inGame || that.gameOver) && that.controls.isLocked) {
                         that.controls.moveRight(0.25);
-                    } else if (!that.gameOver && !that.isPaused) {
+                    } else if (!that.gameOver && !that.isPaused && that.inGame) {
                         if (that.playerCar.position.x > -10.5) {
                             that.playerCar.position.x -= 0.25;
                             if (that.playerCar.rotation.y > -0.2) {
@@ -272,6 +272,47 @@ class Game {
         };
 
         document.addEventListener('keydown', onKeyDown, false);
+
+
+
+        const modal = document.getElementById("myModal");
+        const btn = document.getElementById("myBtn");
+        const span = document.getElementsByClassName("close")[0];
+        const next = document.getElementById("next");
+        const prev = document.getElementById('prev');
+        // console.log(next);
+
+        btn.onclick = function() {
+            modal.style.display = "block";
+        }
+
+        span.onclick = function() {
+            modal.style.display = "none";
+        }
+
+        next.addEventListener("click", function() {
+            // console.log('click');
+            document.getElementById('instructions-1').style.display = 'none';
+            document.getElementById('instructions-2').style.display = 'block';
+        }, false);
+
+        prev.addEventListener("click", function() {
+            // console.log('click');
+            document.getElementById('instructions-1').style.display = 'block';
+            document.getElementById('instructions-2').style.display = 'none';
+        }, false);
+
+        // next.onClick = function() {
+        //     console.log('click');
+        //     document.getElementById('instructions-1').style.display = 'none';
+        //     document.getElementById('instructions-2').style.display = 'flex';
+        // }
+
+        window.onclick = function(event) {
+            if (event.target == modal) {
+              modal.style.display = "none";
+            }
+        }
     };
 
     // Choosing to utilize GLTFLoader to work with assets

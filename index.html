@@ -27,12 +27,42 @@
     <div id="score"></div>
     <div class="menu">
         <p id="start-button">Start Game</p>
-        <ul id="instructions">
-            <li>Move: WASD</li>
-            <li>Look: MOUSE</li>
-            <li>Mute: M</li>
-            <li id="hint">Hint: Click the car</li>
-        </ul>
+            <!-- Trigger button for the modal -->
+            <p id="myBtn">Instructions</p>
+
+            <!-- <ul id="instructions">
+                <li>Move: WASD</li>
+                <li>Look: MOUSE</li>
+                <li>Mute: M</li>
+                <li id="hint">Hint: Click the car</li> 
+            </ul> -->
+
+        <div id="myModal" class="modal">
+
+            <!-- Modal content -->
+            <div class="modal-content">
+              <span class="close">&times;</span>
+              <h1>How to play:</h1>
+                <ul id="instructions-1">
+                    <li>Move: WASD</li>
+                    <li>Look: MOUSE</li>
+                    <li>Mute: M</li>
+                    <!-- <li>Hint: Click the car</li> -->
+                    <li id='next'>-></li>
+                </ul>
+                <ul id="instructions-2">
+                    <li>1. Click the car</li>
+                    <img src='https://cdn.discordapp.com/attachments/747021191067205682/914654903505395742/unknown.png'>
+                    <li>2. Click Drive</li>
+                    <img src='https://cdn.discordapp.com/attachments/747021191067205682/914655051593691136/unknown.png'>
+                    <li>3. Avoid other cars on the road</li>
+                    <img src='https://cdn.discordapp.com/attachments/747021191067205682/914655355043209287/unknown.png'>
+                    <!-- <li>Hint: Click the car</li> -->
+                    <li id='prev'><-</li>
+                </ul>
+            </div>
+          
+          </div>
     </div>
     <canvas id="game"></canvas>
 </body>
