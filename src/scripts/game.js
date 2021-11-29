@@ -529,10 +529,7 @@ class Game {
 
             for (let i = 0; i < this.cans.boxGeoms.length; i++) {
                 if (this.cans.boxGeoms[i].intersectsBox(this.playerBox)) {
-                    this.score += 100;
-                    // this.scene.remove(this.cans.cans[i]);
-                    // this.cans.boxGeoms.splice(i, 1);
-                    // this.cans.cans.splice(i, 1);
+                    this.score += 200;
                     const min = Math.floor(-10);
                     const max = Math.floor(10);
                     const rando = Math.floor((Math.random() * (max - min) + min));
