@@ -5,6 +5,7 @@ import { FontLoader } from "three/examples/jsm/loaders/FontLoader";
 import { TextGeometry } from "three/examples/jsm/geometries/TextGeometry";
 import Skybox from "./skybox";
 import Peds from "./pedcars";
+import JerryCans from "./jerrycan";
 import Sound from "./sounds";
 import Tree from "./trees";
 
@@ -40,6 +41,8 @@ class Game {
         // this.populate();
         //Create Ped Cars
         this.peds = new Peds(this.scene);
+
+        this.cans = new JerryCans(this.scene)
         // Setup Controls
         this.setupControls();
         // In order to get bouncing animation on text
@@ -399,6 +402,7 @@ class Game {
                 case 100:
                     if (this.populated)
                     this.peds.newCar();
+                    this.cans.newJerry();
                     break;
                 case 1000: // score amount to add a new car
                     this.peds.newCar(); // can make this dynamic later by specifying car type, will also help scale difficulty
@@ -408,6 +412,8 @@ class Game {
                     break;
                 case 5000:
                     this.peds.newCar();
+                    this.cans.newJerry();
+                    this.cans.newJerry();
                     break;
                 case 8000:
                     this.peds.newCar();
@@ -419,6 +425,8 @@ class Game {
                 case 15000:
                     this.peds.newCar();
                     this.peds.newCar();
+                    this.cans.newJerry();
+                    this.cans.newJerry();
                     break;
                 case 20000:
                     this.peds.newCar();
@@ -475,6 +483,31 @@ class Game {
                 };
             };
 
+            for (let i = 0; i < this.cans.cans.length; i++) {
+                if (this.cans.cans[i].position.z < -17) {
+                    const min = Math.floor(-20);
+                    const max = Math.floor(5);
+                    const rando = Math.floor((Math.random() * (max - min) + min));
+
+                    // Prevents car from spawning too close to player before they reach a certain score
+                    let min2;
+                    if (this.score > 4000) { 
+                        min2 = Math.floor(250);
+                    }else {
+                        min2 = Math.floor(400);
+                    }
+                    const max2 = Math.floor(600);
+                    const rando2 = Math.floor((Math.random() * (max2 - min2) + min2));
+
+                    this.cans.cans[i].position.z = rando2; 
+                    this.cans.cans[i].position.x = rando;
+                } else {
+                    this.cans.cans[i].rotation.y += 0.05;
+                    this.cans.cans[i].position.z -= 2.0;
+                };
+            };
+
+
             this.updateColliders();
 
             for (let i = 0; i < this.peds.boxGeoms.length; i++) {
@@ -510,6 +543,10 @@ class Game {
         //updating ped colliders aka box3 each time we animate
         for (let i = 0; i < this.peds.boxGeoms.length; i++) {
             this.peds.boxGeoms[i].setFromObject(this.peds.cars[i]);
+        };
+
+        for (let i = 0; i < this.cans.boxGeoms.length; i++) {
+            this.cans.boxGeoms[i].setFromObject(this.cans.cans[i]);
         };
     };
 
@@ -593,6 +630,7 @@ class Game {
         crosshair.style.display = "none"
         this.scene.remove( this.titleText );
         this.peds.reset();
+        this.cans.reset();
 
         this.gameOver = false; 
         this.gameTimer.start();
