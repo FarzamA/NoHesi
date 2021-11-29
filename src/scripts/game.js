@@ -100,7 +100,9 @@ class Game {
         const btn = document.getElementById("myBtn");
         const span = document.getElementsByClassName("close")[0];
         const next = document.getElementById("next");
+        const next2 = document.getElementById('next-2');
         const prev = document.getElementById('prev');
+        const prev2 = document.getElementById('prev-2');
 
         btn.onclick = function() {
             modal.style.display = "block";
@@ -111,16 +113,29 @@ class Game {
         }
 
         next.addEventListener("click", function() {
+            header.innerHTML = 'Starting the game:';
             document.getElementById('instructions-1').style.display = 'none';
             document.getElementById('instructions-2').style.display = 'block';
-            header.innerHTML = 'Starting the game:'
         }, false);
+
+        next2.addEventListener('click', function() {
+            header.innerHTML = 'Objectives:';
+            document.getElementById('instructions-2').style.display = 'none';
+            document.getElementById('instructions-3').style.display = 'block';
+        
+        })
 
         prev.addEventListener("click", function() {
             header.innerHTML = 'Controls:'
             document.getElementById('instructions-1').style.display = 'block';
             document.getElementById('instructions-2').style.display = 'none';
         }, false);
+
+        prev2.addEventListener('click', function() {
+            header.innerHTML = 'Starting the game:';
+            document.getElementById('instructions-2').style.display = 'block';
+            document.getElementById('instructions-3').style.display = 'none';
+        })
 
         window.onclick = function(event) {
             if (event.target == modal) {
