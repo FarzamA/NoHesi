@@ -23,7 +23,7 @@ class JerryCans {
             const min2 = Math.floor(400);
             const max2 = Math.floor(600);
             const rando2 = Math.floor((Math.random() * (max2 - min2) + min2));
-            that.jerryCan.scale.set(1.0, 1.0, 1.0);
+            that.jerryCan.scale.set(0.5, 0.5, 0.5);
             that.jerryCan.position.set(rando, 1.5, rando2);
                 
             // Add shadows to everything that is related to the car (still trying to implement these with the lighting)
@@ -38,7 +38,7 @@ class JerryCans {
                 };
             });
 
-            that.scene.add( that.jerryCan ); 
+            // that.scene.add( that.jerryCan ); 
         },
         // Boilerplate
         function(xhr) {
