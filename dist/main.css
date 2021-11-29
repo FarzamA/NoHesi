@@ -191,15 +191,33 @@ h1 {
   cursor: default;
 }
 
-#instructions-2 {
+#instructions-2, #instructions-3 {
   display: none;
 }
 
 /* li:last-child {
-  float: right;
+  display: block;
+  flex: right;
 } */
 
-li:last-child:hover {
+/* li:last-child:hover {
+  cursor: pointer;
+  transition: 0.3s;
+  transform: scale(2.0);
+} */
+
+/* p:hover {
+  cursor: pointer;
+  transition: 0.3s;
+  transform: scale(2.0);
+} */
+
+ul > div {
+  display: flex;
+  justify-content: space-between;
+}
+
+.switch:hover {
   cursor: pointer;
   transition: 0.3s;
   transform: scale(2.0);

@@ -5,6 +5,7 @@ import { FontLoader } from "three/examples/jsm/loaders/FontLoader";
 import { TextGeometry } from "three/examples/jsm/geometries/TextGeometry";
 import Skybox from "./skybox";
 import Peds from "./pedcars";
+import JerryCans from "./jerrycan";
 import Sound from "./sounds";
 import Tree from "./trees";
 
@@ -40,6 +41,8 @@ class Game {
         // this.populate();
         //Create Ped Cars
         this.peds = new Peds(this.scene);
+
+        this.cans = new JerryCans(this.scene)
         // Setup Controls
         this.setupControls();
         // In order to get bouncing animation on text
@@ -97,7 +100,9 @@ class Game {
         const btn = document.getElementById("myBtn");
         const span = document.getElementsByClassName("close")[0];
         const next = document.getElementById("next");
+        const next2 = document.getElementById('next-2');
         const prev = document.getElementById('prev');
+        const prev2 = document.getElementById('prev-2');
 
         btn.onclick = function() {
             modal.style.display = "block";
@@ -108,16 +113,29 @@ class Game {
         }
 
         next.addEventListener("click", function() {
+            header.innerHTML = 'Starting the game:';
             document.getElementById('instructions-1').style.display = 'none';
             document.getElementById('instructions-2').style.display = 'block';
-            header.innerHTML = 'Starting the game:'
         }, false);
+
+        next2.addEventListener('click', function() {
+            header.innerHTML = 'Objectives:';
+            document.getElementById('instructions-2').style.display = 'none';
+            document.getElementById('instructions-3').style.display = 'block';
+        
+        })
 
         prev.addEventListener("click", function() {
             header.innerHTML = 'Controls:'
             document.getElementById('instructions-1').style.display = 'block';
             document.getElementById('instructions-2').style.display = 'none';
         }, false);
+
+        prev2.addEventListener('click', function() {
+            header.innerHTML = 'Starting the game:';
+            document.getElementById('instructions-2').style.display = 'block';
+            document.getElementById('instructions-3').style.display = 'none';
+        })
 
         window.onclick = function(event) {
             if (event.target == modal) {
@@ -399,35 +417,49 @@ class Game {
                 case 100:
                     if (this.populated)
                     this.peds.newCar();
+                    this.cans.newJerry();
                     break;
                 case 1000: // score amount to add a new car
                     this.peds.newCar(); // can make this dynamic later by specifying car type, will also help scale difficulty
+                    this.cans.newJerry();
                     break;
                 case 2700: 
                     this.peds.newCar();
+                    this.cans.newJerry();
                     break;
                 case 5000:
                     this.peds.newCar();
+                    this.cans.newJerry();
                     break;
                 case 8000:
                     this.peds.newCar();
+                    this.cans.newJerry();
                     break;
                 case 10000:
                     this.peds.newCar();
                     this.peds.newCar();
+                    this.cans.newJerry();
+                    this.cans.newJerry();
                     break;
                 case 15000:
                     this.peds.newCar();
                     this.peds.newCar();
+                    this.cans.newJerry();
+                    this.cans.newJerry();
                     break;
                 case 20000:
                     this.peds.newCar();
                     this.peds.newCar();
+                    this.cans.newJerry();
+                    this.cans.newJerry();
                     break;
                 case 27000:
                     this.peds.newCar();
                     this.peds.newCar();
                     this.peds.newCar();
+                    this.cans.newJerry();
+                    this.cans.newJerry();
+                    this.cans.newJerry();
                     break;
                 case 32000:
                     this.peds.newCar();
@@ -438,6 +470,8 @@ class Game {
                     this.peds.newCar();
                     this.peds.newCar();
                     this.peds.newCar();
+                    this.cans.newJerry();
+                    this.cans.newJerry();
                     break;
             }
     
@@ -475,6 +509,26 @@ class Game {
                 };
             };
 
+            for (let i = 0; i < this.cans.cans.length; i++) {
+                if (this.cans.cans[i].position.z < -17) {
+                    const min = Math.floor(-10);
+                    const max = Math.floor(10);
+                    const rando = Math.floor((Math.random() * (max - min) + min));
+
+                    // Prevents car from spawning too close to player before they reach a certain score
+                    let min2 = Math.floor(250);
+                    const max2 = Math.floor(600);
+                    const rando2 = Math.floor((Math.random() * (max2 - min2) + min2));
+
+                    this.cans.cans[i].position.z = rando2; 
+                    this.cans.cans[i].position.x = rando;
+                } else {
+                    this.cans.cans[i].rotation.y += 0.05;
+                    this.cans.cans[i].position.z -= 2.0;
+                };
+            };
+
+
             this.updateColliders();
 
             for (let i = 0; i < this.peds.boxGeoms.length; i++) {
@@ -488,15 +542,39 @@ class Game {
                 };
             };
 
+            for (let i = 0; i < this.cans.boxGeoms.length; i++) {
+                if (this.cans.boxGeoms[i].intersectsBox(this.playerBox)) {
+                    this.score += 200;
+                    const min = Math.floor(-10);
+                    const max = Math.floor(10);
+                    const rando = Math.floor((Math.random() * (max - min) + min));
+                    let min2 = Math.floor(500);
+                    const max2 = Math.floor(1000);
+                    const rando2 = Math.floor((Math.random() * (max2 - min2) + min2));
+
+                    this.cans.cans[i].position.z = rando2; 
+                    this.cans.cans[i].position.x = rando;
+                };
+            };
+
             if (this.gameOver) {
                 this.sound.stop();
                 for (let i = 0; i < this.peds.cars.length; i++) {
-                    this.scene.remove(this.peds.cars[i])
+                    this.scene.remove(this.peds.cars[i]);
                 };
     
                 for (let i = 0; i < this.peds.cars.length; i++) {
                     this.peds.cars.pop();
                     this.peds.boxGeoms.pop();
+                };
+
+                for (let i = 0; i < this.cans.cans.length; i++) {
+                    this.scene.remove(this.cans.cans[i])
+                };
+    
+                for (let i = 0; i < this.cans.cans.length; i++) {
+                    this.cans.cans.pop();
+                    this.cans.boxGeoms.pop();
                 };
             };
         };
@@ -510,6 +588,10 @@ class Game {
         //updating ped colliders aka box3 each time we animate
         for (let i = 0; i < this.peds.boxGeoms.length; i++) {
             this.peds.boxGeoms[i].setFromObject(this.peds.cars[i]);
+        };
+
+        for (let i = 0; i < this.cans.boxGeoms.length; i++) {
+            this.cans.boxGeoms[i].setFromObject(this.cans.cans[i]);
         };
     };
 
@@ -593,6 +675,7 @@ class Game {
         crosshair.style.display = "none"
         this.scene.remove( this.titleText );
         this.peds.reset();
+        this.cans.reset();
 
         this.gameOver = false; 
         this.gameTimer.start();
