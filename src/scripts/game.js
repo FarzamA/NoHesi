@@ -521,6 +521,12 @@ class Game {
                 };
             };
 
+            for (let i = 0; i < this.cans.boxGeoms.length; i++) {
+                if (this.cans.boxGeoms[i].intersectsBox(this.playerBox)) {
+                   this.score += 100;
+                };
+            };
+
             if (this.gameOver) {
                 this.sound.stop();
                 for (let i = 0; i < this.peds.cars.length; i++) {
@@ -530,6 +536,15 @@ class Game {
                 for (let i = 0; i < this.peds.cars.length; i++) {
                     this.peds.cars.pop();
                     this.peds.boxGeoms.pop();
+                };
+
+                for (let i = 0; i < this.cans.cans.length; i++) {
+                    this.scene.remove(this.cans.cans[i])
+                };
+    
+                for (let i = 0; i < this.cans.cans.length; i++) {
+                    this.cans.cans.pop();
+                    this.cans.boxGeoms.pop();
                 };
             };
         };
