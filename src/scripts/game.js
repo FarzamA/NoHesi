@@ -324,7 +324,7 @@ class Game {
         // and what to do if there is an error
         loader.load("./src/assets/cars/playerCar/scene.gltf", function(gltf) {
             that.playerCar = gltf.scene;
-            that.playerCar.recieveShadow = true; // Still working on lighting
+            that.playerCar.receiveShadow = true; // Still working on lighting
             that.playerCar.position.set(0.3, 0.3, 0);
             
             // Add shadows to everything that is related to the car (still trying to implement these with the lighting)
@@ -332,7 +332,7 @@ class Game {
                 // Make sure to only add shadows to meshes
                 if (child.isMesh){
                     child.castShadow = true; 
-                    child.recieveShadow = true;
+                    child.receiveShadow = true;
                 };
 
                 if (child.geometry) {

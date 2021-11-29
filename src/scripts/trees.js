@@ -14,7 +14,7 @@ class Tree {
         
         loader.load("./src/assets/models/treepurple.glb", function(glb) {
             that.tree = glb.scene;
-            that.tree.recieveShadow = true; // Still working on lighting
+            that.tree.receiveShadow = true; // Still working on lighting
             that.tree.scale.set(0.5, 0.5, 0.5);
             that.tree.position.set(that.pos, 0.3, 25);
                 
@@ -23,7 +23,7 @@ class Tree {
                 // Make sure to only add shadows to meshes
                 if (child.isMesh){
                     child.castShadow = true; 
-                    child.recieveShadow = true;
+                    child.receiveShadow = true;
                 };
             });
         },

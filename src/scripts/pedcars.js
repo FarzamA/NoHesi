@@ -22,7 +22,7 @@ class Peds {
             const min2 = Math.floor(400);
             const max2 = Math.floor(600);
             const rando2 = Math.floor((Math.random() * (max2 - min2) + min2));
-            that.pedCar.recieveShadow = true; 
+            that.pedCar.receiveShadow = true; 
             that.pedCar.scale.set(0.015, 0.015, 0.015);
             that.pedCar.position.set(rando, 0.3, rando2);
 
@@ -30,7 +30,7 @@ class Peds {
             that.pedCar.traverse( function(c) {
                 if (c.isMesh) {
                     c.castShadow = true; 
-                    c.recieveShadow = true; 
+                    c.receiveShadow = true; 
                 };
 
                 if (c.geometry) {
