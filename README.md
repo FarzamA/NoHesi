@@ -1,7 +1,7 @@
 # No Hesi
 
 ## Background 
-Welcome, to the world of no hesitation. A game specifically targeted at those who have the need for speed and are itching to speed down a highway weaving through traffic as if it isn't even there. The game is very simple and has a basic flow. You are the driver of a car and your goal is to speed along the highway for as long as possible, while avoiding other cars and obstacles that are in your way. Sounds easy enough right? The complication comes in when there are also other cars and obstacles on the road that might be looking to ruin your day as you try to get your daily dose of speed.
+Welcome, to the world of no hesitation. A game specifically targeted at those who have the need for speed and are itching to speed down a highway weaving through traffic as if it isn't even there. The game is very simple and has a basic flow. You are the driver of a car and your goal is to speed along the highway for as long as possible. Sounds easy enough right? The complication comes in when there are also other cars and obstacles on the road that might be looking to ruin your day as you try to get your daily dose of speed.
 
 ## Functionality & MVPs
 In No Hesi, users will be able to: 
