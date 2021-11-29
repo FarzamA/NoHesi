@@ -204,3 +204,10 @@ li:last-child:hover {
   transition: 0.3s;
   transform: scale(2.0);
 }
+
+ul > div {
+  display: flex;
+  justify-content: flex-end;
+  padding-right: 10px;
+  margin-bottom: -30px;
+}

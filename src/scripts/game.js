@@ -93,6 +93,7 @@ class Game {
 
     modal() {
         const modal = document.getElementById("myModal");
+        const header = document.getElementById('modal-header');
         const btn = document.getElementById("myBtn");
         const span = document.getElementsByClassName("close")[0];
         const next = document.getElementById("next");
@@ -109,9 +110,11 @@ class Game {
         next.addEventListener("click", function() {
             document.getElementById('instructions-1').style.display = 'none';
             document.getElementById('instructions-2').style.display = 'block';
+            header.innerHTML = 'Starting the game:'
         }, false);
 
         prev.addEventListener("click", function() {
+            header.innerHTML = 'Controls:'
             document.getElementById('instructions-1').style.display = 'block';
             document.getElementById('instructions-2').style.display = 'none';
         }, false);
