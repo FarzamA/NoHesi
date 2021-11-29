@@ -406,21 +406,25 @@ class Game {
                     break;
                 case 1000: // score amount to add a new car
                     this.peds.newCar(); // can make this dynamic later by specifying car type, will also help scale difficulty
+                    this.cans.newJerry();
                     break;
                 case 2700: 
                     this.peds.newCar();
+                    this.cans.newJerry();
                     break;
                 case 5000:
                     this.peds.newCar();
                     this.cans.newJerry();
-                    this.cans.newJerry();
                     break;
                 case 8000:
                     this.peds.newCar();
+                    this.cans.newJerry();
                     break;
                 case 10000:
                     this.peds.newCar();
                     this.peds.newCar();
+                    this.cans.newJerry();
+                    this.cans.newJerry();
                     break;
                 case 15000:
                     this.peds.newCar();
@@ -431,11 +435,16 @@ class Game {
                 case 20000:
                     this.peds.newCar();
                     this.peds.newCar();
+                    this.cans.newJerry();
+                    this.cans.newJerry();
                     break;
                 case 27000:
                     this.peds.newCar();
                     this.peds.newCar();
                     this.peds.newCar();
+                    this.cans.newJerry();
+                    this.cans.newJerry();
+                    this.cans.newJerry();
                     break;
                 case 32000:
                     this.peds.newCar();
@@ -446,6 +455,8 @@ class Game {
                     this.peds.newCar();
                     this.peds.newCar();
                     this.peds.newCar();
+                    this.cans.newJerry();
+                    this.cans.newJerry();
                     break;
             }
     
@@ -485,17 +496,12 @@ class Game {
 
             for (let i = 0; i < this.cans.cans.length; i++) {
                 if (this.cans.cans[i].position.z < -17) {
-                    const min = Math.floor(-20);
-                    const max = Math.floor(5);
+                    const min = Math.floor(-10);
+                    const max = Math.floor(10);
                     const rando = Math.floor((Math.random() * (max - min) + min));
 
                     // Prevents car from spawning too close to player before they reach a certain score
-                    let min2;
-                    if (this.score > 4000) { 
-                        min2 = Math.floor(250);
-                    }else {
-                        min2 = Math.floor(400);
-                    }
+                    let min2 = Math.floor(250);
                     const max2 = Math.floor(600);
                     const rando2 = Math.floor((Math.random() * (max2 - min2) + min2));
 
@@ -523,14 +529,26 @@ class Game {
 
             for (let i = 0; i < this.cans.boxGeoms.length; i++) {
                 if (this.cans.boxGeoms[i].intersectsBox(this.playerBox)) {
-                   this.score += 100;
+                    this.score += 100;
+                    // this.scene.remove(this.cans.cans[i]);
+                    // this.cans.boxGeoms.splice(i, 1);
+                    // this.cans.cans.splice(i, 1);
+                    const min = Math.floor(-10);
+                    const max = Math.floor(10);
+                    const rando = Math.floor((Math.random() * (max - min) + min));
+                    let min2 = Math.floor(500);
+                    const max2 = Math.floor(1000);
+                    const rando2 = Math.floor((Math.random() * (max2 - min2) + min2));
+
+                    this.cans.cans[i].position.z = rando2; 
+                    this.cans.cans[i].position.x = rando;
                 };
             };
 
             if (this.gameOver) {
                 this.sound.stop();
                 for (let i = 0; i < this.peds.cars.length; i++) {
-                    this.scene.remove(this.peds.cars[i])
+                    this.scene.remove(this.peds.cars[i]);
                 };
     
                 for (let i = 0; i < this.peds.cars.length; i++) {

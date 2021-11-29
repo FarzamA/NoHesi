@@ -16,8 +16,8 @@ class JerryCans {
         loader.load("./src/assets/models/jerry.glb", function(glb) {
             that.jerryCan = glb.scene;
             that.jerryCan.receiveShadow = true; // Still working on lighting
-            const min = Math.floor(-20);
-            const max = Math.floor(5);
+            const min = Math.floor(-10);
+            const max = Math.floor(10);
             const rando = Math.floor((Math.random() * (max - min) + min));
 
             const min2 = Math.floor(400);
@@ -25,6 +25,8 @@ class JerryCans {
             const rando2 = Math.floor((Math.random() * (max2 - min2) + min2));
             that.jerryCan.scale.set(0.5, 0.5, 0.5);
             that.jerryCan.position.set(rando, 1.5, rando2);
+            // For testing max and min bounds
+            // that.jerryCan.position.set(10, 1.5, 0);
                 
             // Add shadows to everything that is related to the car (still trying to implement these with the lighting)
             that.jerryCan.traverse( function(child) {
@@ -38,6 +40,7 @@ class JerryCans {
                 };
             });
 
+            // For testing max and min bounds
             // that.scene.add( that.jerryCan ); 
         },
         // Boilerplate
@@ -61,8 +64,8 @@ class JerryCans {
 
     reset() {
         for (let i = 0; i < this.cans.length; i++) {
-            const min = Math.floor(-20);
-            const max = Math.floor(5);
+            const min = Math.floor(-10);
+            const max = Math.floor(10);
             const rando = Math.floor((Math.random() * (max - min) + min));
 
             const min2 = Math.floor(100);
