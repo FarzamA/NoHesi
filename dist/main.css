@@ -205,10 +205,4 @@ li:last-child:hover {
   transform: scale(2.0);
 }
 
-/* move arrow to the bottom right of modal */
-ul > div {
-  display: flex;
-  justify-content: flex-end;
-  padding-right: 10px;
-  margin-bottom: -30px;
-}
+
