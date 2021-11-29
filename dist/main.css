@@ -99,15 +99,6 @@ p:last-of-type {
   font-size: 40px;
 }
 
-/* #myBtn {
-  font-size: 50px;
-}
-
-#my-Btn:hover {
-  transform: scale(1.5);
-  cursor: pointer;
-} */
-
 p:hover {
   transition: 0.3s;
   transform: scale(1.5);
@@ -191,26 +182,9 @@ h1 {
   cursor: default;
 }
 
-#instructions-2, #instructions-3 {
+div > ul:nth-last-of-type(-n+2) {
   display: none;
 }
-
-/* li:last-child {
-  display: block;
-  flex: right;
-} */
-
-/* li:last-child:hover {
-  cursor: pointer;
-  transition: 0.3s;
-  transform: scale(2.0);
-} */
-
-/* p:hover {
-  cursor: pointer;
-  transition: 0.3s;
-  transform: scale(2.0);
-} */
 
 ul > div {
   display: flex;
