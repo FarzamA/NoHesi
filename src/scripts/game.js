@@ -553,6 +553,11 @@ class Game {
             for (let i = 0; i < this.cans.boxGeoms.length; i++) {
                 if (this.cans.boxGeoms[i].intersectsBox(this.playerBox)) {
                     this.score += 200;
+                    const extraPts = document.querySelector(".extra-pts");
+                    extraPts.style.display = 'block';
+                    setTimeout(() => {
+                        extraPts.style.display = 'none';
+                    }, 1000)
                     const min = Math.floor(-10);
                     const max = Math.floor(10);
                     const rando = Math.floor((Math.random() * (max - min) + min));
@@ -727,6 +732,12 @@ class Game {
             });
 
             const geometry = new TextGeometry('DRIVE', {
+                font: font, 
+                size: 0.7, 
+                height: 0.08
+            });
+
+            const extraPoints = new TextGeometry('+200', {
                 font: font, 
                 size: 0.7, 
                 height: 0.08
