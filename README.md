@@ -5,35 +5,43 @@ Welcome, to the world of no hesitation. A game specifically targeted at those wh
 
 ## Functionality & MVPs
 In No Hesi, users will be able to: 
-* Drive a car in order to avoid other cars/obstacles
+* Drive a car in order to avoid other cars
+* Gather jerry cans for extra points
 * Keep track of their score as they have been driving 
 * Have an interactive world in which the game starts, and ends.
-* Use the items the player picks up
-* Optimization of assets in order to be able to render more models on screen
+* Have a mutable soundtrack that fits theme of the game
 
 In addition, this project will include: 
 * A production README 
 * Instructions on how to play the game
+* Optimization of assets in order to load more models on the screen at a time
 
 ## Screenshots
-![Splash-Screen](https://cdn.discordapp.com/attachments/747021191067205682/898198564554043422/Screenshot_122.png)
-![Intro-Screen](https://cdn.discordapp.com/attachments/747021191067205682/898198917487951902/Screenshot_123.png)
-![Interactable](https://cdn.discordapp.com/attachments/747021191067205682/898199441805299752/Screenshot_124.png)
-![Score](https://cdn.discordapp.com/attachments/747021191067205682/898199442849685554/Screenshot_125.png)
+# Splash Screen
+![Splash-Screen](https://nohesitation.s3.amazonaws.com/SPLASH.png)
+# Instructional Modal
+![Modal](https://nohesitation.s3.amazonaws.com/CONTROLS.png)
+# Interactable Link List
+![Links](https://nohesitation.s3.amazonaws.com/LINKS.png)
+# Dynamic Score
+![Score](https://nohesitation.s3.amazonaws.com/SCORE.png)
 
 ## Wireframes
-![Wireframe](https://cdn.discordapp.com/attachments/747021191067205682/895781707268104252/Screenshot_116.png)
-* Nav links list that includes links to Github repo as well as LinkedIn
-* Controls will include the instructions for how to steer your car 
+![Wireframe](https://nohesitation.s3.amazonaws.com/WIREFRAME1.png)
+* Nav links list 
 * Score tracker will keep track of the score 
 * A button in the middle of the splash screen to actually begin the game 
-* Option to turn the sounds on and off(bonus feature)
+![Wireframe-2](https://nohesitation.s3.amazonaws.com/WIREFRAME2.png)
+* Controls will include the instructions for how to steer your car 
+* Controls will also include how to mute sound
+* Instructions will show how to start the game
+* Objectives will show how to win the game
 
 ## Technologies, Libraries, API
 * Threejs in order to render the 3d view and models 
 * Pointer Lock API
 * Webpack and Babel in order to bundle source JavaScript code
-* Npm to manage project dependencies 
+* NPM to manage project dependencies
 
 ## Implementation Timeline 
 ### Friday Afternoon & Weekend
@@ -77,6 +85,5 @@ In addition, this project will include:
 * Models provided by turbosquid.com
 * Skybox images provided by gamebanana.com
 * Font provided by 1001fonts.com
-* Music Created Composed by Christopher Clarke
 * All the people who gave me words of encouragement and great ideas
 
