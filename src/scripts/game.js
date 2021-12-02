@@ -201,7 +201,7 @@ class Game {
 
         const color = new THREE.Color("rgb(0, 0, 0)");
 
-        // Phong material for shiny refllective light effect
+        // Phong material for shiny reflective light effect
         const material = new THREE.MeshPhongMaterial( { color: color, side: THREE.DoubleSide });
 
         const road = new THREE.Mesh( geometry, material );
