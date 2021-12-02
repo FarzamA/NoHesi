@@ -536,7 +536,15 @@ class Game {
                     this.gameOver = true
                     // Logic for once the game is over
                     this.controls.unlock();
-                    this.camera.position.set((that.playerCar.position.x) , 2.0, (that.playerCar.position.z - 2.0));
+                    // logic to set camera in front of where the car is
+                    // this.camera.position.set((that.playerCar.position.x) , 2.0, (that.playerCar.position.z - 2.0));
+
+                    // refactor logic to look at live links instead
+                    this.camera.position.set((that.gitText.position.x + 2.0) , 2.0, (that.gitText.position.z - 2.0));
+
+                    // make the camera look at the text
+                    this.camera.lookAt( (that.gitText.position.x), (that.gitText.position.y - 0.15), (that.gitText.position.z - 2.0) )
+
                     this.textMesh.position.set((that.playerCar.position.x + 0.6) , (that.playerCar.position.y + 1.5), (that.playerCar.position.z + 2.0));
                     this.scene.add( this.textMesh, this.titleText );
                 };
@@ -749,19 +757,19 @@ class Game {
             that.linkedText.castShadow = true;
 
             that.linkedText.position.set(-15.7, 1.3, 0);
-            that.linkedText.rotateY(Math.PI*0.5)
+            that.linkedText.rotateY(Math.PI*0.5);
 
             that.angelText = new THREE.Mesh( angelGeo, materials );
             that.angelText.castShadow = true;
 
             that.angelText.position.set(-15.7, 0.6, 0);
-            that.angelText.rotateY(Math.PI*0.5)
+            that.angelText.rotateY(Math.PI*0.5);
 
             that.portfolioText = new THREE.Mesh( portfolioGeo, materials );
             that.portfolioText.castShadow = true;
 
             that.portfolioText.position.set(-15.7, 2.7, 0);
-            that.portfolioText.rotateY(Math.PI*0.5)
+            that.portfolioText.rotateY(Math.PI*0.5);
 
             that.textMesh = new THREE.Mesh( geometry, materials );
             that.textMesh.castShadow = true;
