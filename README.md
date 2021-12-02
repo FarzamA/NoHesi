@@ -27,10 +27,12 @@ In addition, this project will include:
 ![Score](https://nohesitation.s3.amazonaws.com/SCORE.png)
 
 ## Wireframes
+# Splash Screen Wireframe
 ![Wireframe](https://nohesitation.s3.amazonaws.com/WIREFRAME1.png)
 * Nav links list 
 * Score tracker will keep track of the score 
 * A button in the middle of the splash screen to actually begin the game 
+# Modal Wireframe
 ![Wireframe-2](https://nohesitation.s3.amazonaws.com/WIREFRAME2.png)
 * Controls will include the instructions for how to steer your car 
 * Controls will also include how to mute sound
