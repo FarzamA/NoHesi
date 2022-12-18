@@ -28,7 +28,7 @@ class Skybox {
         const sides = ['ft','bk', 'up', 'dn', 'rt', 'lf'];
         const finalPaths = sides.map(side => {
             return base + "_" + side + type;
-        })
+        });
 
         return finalPaths
     }

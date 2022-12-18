@@ -35,9 +35,8 @@ class JerryCans {
                     child.castShadow = true; 
                     child.receiveShadow = true;
                 };
-                if (child.geometry) {
+                if (child.geometry) 
                     child.geometry.computeBoundingBox();
-                };
             });
 
             // For testing max and min bounds

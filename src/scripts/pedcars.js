@@ -33,11 +33,9 @@ class Peds {
                     c.receiveShadow = true; 
                 };
 
-                if (c.geometry) {
+                if (c.geometry) 
                     c.geometry.computeBoundingBox();
-                };
-            });
-                
+            });     
         }, 
         // function(xhr) {
         //     // console.log((xhr.loaded/xhr.total * 100) + '% Loaded'); 

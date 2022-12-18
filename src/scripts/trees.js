@@ -36,13 +36,13 @@ class Tree {
         );
     };
 
-    newTree( pos ) {
-            for (let i = 1; i < 11; i++) {
-                const clone = this.tree.clone();
-                clone.position.set(pos, 0.3, (i * 50));
-                this.scene.add(clone);
-                this.trees.push(clone); 
-            }
+    newTree(pos) {
+        for (let i = 1; i < 11; i++) {
+            const clone = this.tree.clone();
+            clone.position.set(pos, 0.3, (i * 50));
+            this.scene.add(clone);
+            this.trees.push(clone); 
+        }
     }
 };
 
