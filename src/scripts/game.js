@@ -85,7 +85,6 @@ class Game {
         // DO NOT SET ALPHA TO TRUE CAUSES CLIPPING
         this.renderer = new THREE.WebGLRenderer({canvas});
 
-
         // Handle rest of renderer logic
         this.renderer.setSize( window.innerWidth, window.innerHeight );
         document.body.appendChild( this.renderer.domElement );
@@ -138,9 +137,8 @@ class Game {
         })
 
         window.onclick = function(event) {
-            if (event.target == modal) {
+            if (event.target == modal) 
               modal.style.display = "none";
-            }
         }
     }
 
@@ -230,7 +228,6 @@ class Game {
         const crosshair = document.querySelector(".crosshair");
         const startButton = document.querySelector("#start-button");
         
-        
         this.controls = new PointerLockControls( this.camera, this.renderer.domElement );
         startButton.addEventListener("click", function() {
             that.controls.lock();
@@ -240,27 +237,21 @@ class Game {
 
         // need this in order to be able to focus in and out of start menu 
         this.controls.addEventListener('lock', function() {
-            if (!that.inGame || that.gameOver) {
+            if (!that.inGame || that.gameOver) 
                 crosshair.style.display = 'flex';
-            }
             that.score += that.gameTimer.getDelta();
             that.gameTimer.start();
             menu.classList.add('hidden');
-            
-            
             that.isPaused = false;
         }); 
+
         this.controls.addEventListener('unlock', function() {
             crosshair.style.display = 'none';
             that.gameTimer.stop();
-            if (!that.gameOver) {
-                document.getElementById("start-button").innerHTML = 'Resume Game';
-            } else {
-                document.getElementById("start-button").innerHTML = 'Try Again';
-            }
+            document.getElementById("start-button").innerHTML = !that.gameOver ? 'Resume Game' : 'Try Again';
             menu.classList.remove('hidden');
             that.isPaused = true;
-        } );
+        });
 
 
         // make keyboard controls for pointer locked splash screen \
@@ -268,14 +259,13 @@ class Game {
         const onKeyDown = function(event) {
             switch(event.code) {
                 case "KeyW":
-                    if ((!that.inGame || that.gameOver) && that.controls.isLocked) {
+                    if ((!that.inGame || that.gameOver) && that.controls.isLocked) 
                         that.controls.moveForward(0.25);
-                    } else if (!that.gameOver && !that.isPaused && that.inGame) {
+                    else if (!that.gameOver && !that.isPaused && that.inGame) {
                         if (that.playerCar.position.z < 5) {
                             that.playerCar.position.z += 0.25;
-                            if (that.playerCar.rotation.x > -0.2) {
+                            if (that.playerCar.rotation.x > -0.2)
                                 that.playerCar.rotation.x -= 0.05;
-                            }
                         };
                     };
                     break; 
@@ -285,38 +275,32 @@ class Game {
                     } else if (!that.gameOver && !that.isPaused && that.inGame) {
                         if (that.playerCar.position.x < 10.5) {
                             that.playerCar.position.x += 0.25;
-                            if (that.playerCar.rotation.y < 0.2) {
+                            if (that.playerCar.rotation.y < 0.2)
                                 that.playerCar.rotation.y += 0.05;
-                            } else {
-                                setInterval( () => {
-                                    that.playerCar.rotation.y = 0;
-                                }, 4000)
-                                
-                            }
+                            else 
+                                setInterval(() => { that.playerCar.rotation.y = 0; }, 4000);
                         };
                     };
                     break;
                 case "KeyS":
-                    if ((!that.inGame || that.gameOver) && that.controls.isLocked) {
+                    if ((!that.inGame || that.gameOver) && that.controls.isLocked)
                         that.controls.moveForward(-0.25);
-                    } else if (!that.gameOver && !that.isPaused && that.inGame) {
+                    else if (!that.gameOver && !that.isPaused && that.inGame) {
                         if (that.playerCar.position.z > -5) {
                             that.playerCar.position.z -= 0.25;
-                            if (that.playerCar.rotation.x < 0) {
+                            if (that.playerCar.rotation.x < 0) 
                                 that.playerCar.rotation.x += 0.05;
-                            }
                         }
                     };
                     break;
                 case "KeyD":
-                    if ((!that.inGame || that.gameOver) && that.controls.isLocked) {
+                    if ((!that.inGame || that.gameOver) && that.controls.isLocked)
                         that.controls.moveRight(0.25);
-                    } else if (!that.gameOver && !that.isPaused && that.inGame) {
+                    else if (!that.gameOver && !that.isPaused && that.inGame) {
                         if (that.playerCar.position.x > -10.5) {
                             that.playerCar.position.x -= 0.25;
-                            if (that.playerCar.rotation.y > -0.2) {
+                            if (that.playerCar.rotation.y > -0.2) 
                                 that.playerCar.rotation.y -= 0.05;
-                            }
                         }
                     };
                     break;
@@ -327,10 +311,6 @@ class Game {
         };
 
         document.addEventListener('keydown', onKeyDown, false);
-
-
-
-       
     };
 
     // Choosing to utilize GLTFLoader to work with assets
@@ -353,25 +333,24 @@ class Game {
                     child.receiveShadow = true;
                 };
 
-                if (child.geometry) {
+                if (child.geometry) 
                     child.geometry.computeBoundingBox();
-                };
             });
 
             // Create Collider 
             that.playerBox = new THREE.Box3().setFromObject(that.playerCar);
-   
+
             // Add the car to the scene
             that.scene.add( that.playerCar ); 
-                
-            },
-            // Boilerplate
-            // function(xhr) {
-            //     console.log((xhr.loaded/xhr.total * 100) + "% Loaded");
-            // }, function(error) {
-            //     console.error(error);
-            // }
-            ); 
+        
+        },
+        // Boilerplate
+        // function(xhr) {
+        //     console.log((xhr.loaded/xhr.total * 100) + "% Loaded");
+        // }, function(error) {
+        //     console.error(error);
+        // }
+        ); 
     };
 
     // Game loop + allows for things to easily move on screen
@@ -379,9 +358,9 @@ class Game {
         //needs to be passed in this way otherwise it won't work 
         const that = this;
 
-        setTimeout( function() {
+        setTimeout(function() {
             requestAnimationFrame( function() { that.animate() } );
-        }, 1000 / 60)
+        }, 1000 / 60);
             
 
         if (!this.populated) {
@@ -397,7 +376,7 @@ class Game {
         
         // Weird bug where everything still becomes out of position over time
         if (this.textMesh) {
-            this.textMesh.position.y += (Math.cos(time) * 0.002) ;
+            this.textMesh.position.y += (Math.cos(time) * 0.002);
             this.gitText.position.y += (Math.cos(time) * 0.002);
             this.angelText.position.y += (Math.cos(time) * 0.002);
             this.portfolioText.position.y += (Math.cos(time) * 0.002);
@@ -406,8 +385,7 @@ class Game {
         };
 
         this.spotLight.position.set(0, 30, 0);
-        
-        
+
         if (this.inGame && !this.isPaused && !this.gameOver) {
             this.score += 1;
             this.scoreEle.innerHTML = `${this.score}`;
@@ -477,13 +455,12 @@ class Game {
     
             this.skybox.box.rotation.x += (Math.cos(time) * 0.0001);
             this.plane.rotation.y += 0.01;
-            for (let i = 0; i < this.tree.trees.length; i++) {
-                if (this.tree.trees[i].position.z < -50 ) {
+            for (let i = 0; i < this.tree.trees.length; i++) 
+                if (this.tree.trees[i].position.z < -50 ) 
                     this.tree.trees[i].position.z = 350;
-                } else {
+                else 
                     this.tree.trees[i].position.z -= 0.40;
-                }
-            }
+            
 
             // Random car spawn after they hit -17 z index
             for (let i = 0; i < this.peds.cars.length; i++) {
@@ -504,9 +481,8 @@ class Game {
 
                     this.peds.cars[i].position.z = rando2; 
                     this.peds.cars[i].position.x = rando;
-                } else {
+                } else 
                     this.peds.cars[i].position.z -= 2.0;
-                };
             };
 
             for (let i = 0; i < this.cans.cans.length; i++) {
@@ -572,18 +548,16 @@ class Game {
 
             if (this.gameOver) {
                 this.sound.stop();
-                for (let i = 0; i < this.peds.cars.length; i++) {
+                for (let i = 0; i < this.peds.cars.length; i++)
                     this.scene.remove(this.peds.cars[i]);
-                };
     
-                for (let i = 0; i < this.peds.cars.length; i++) {
+                for (let i = 0; i < this.peds.cars.length; i++){
                     this.peds.cars.pop();
                     this.peds.boxGeoms.pop();
                 };
 
-                for (let i = 0; i < this.cans.cans.length; i++) {
+                for (let i = 0; i < this.cans.cans.length; i++)
                     this.scene.remove(this.cans.cans[i])
-                };
     
                 for (let i = 0; i < this.cans.cans.length; i++) {
                     this.cans.cans.pop();
@@ -599,13 +573,11 @@ class Game {
         this.playerBox.setFromObject(this.playerCar);
 
         //updating ped colliders aka box3 each time we animate
-        for (let i = 0; i < this.peds.boxGeoms.length; i++) {
+        for (let i = 0; i < this.peds.boxGeoms.length; i++) 
             this.peds.boxGeoms[i].setFromObject(this.peds.cars[i]);
-        };
 
-        for (let i = 0; i < this.cans.boxGeoms.length; i++) {
+        for (let i = 0; i < this.cans.boxGeoms.length; i++) 
             this.cans.boxGeoms[i].setFromObject(this.cans.cans[i]);
-        };
     };
 
      //Raycasting for selection of specific objects
@@ -625,7 +597,6 @@ class Game {
         this.render();
 
         this.renderer.domElement.addEventListener( 'mousemove', onMouseMove, false );
-
     };
 
     // Handles all logic when something inside the scene is clicked
@@ -648,9 +619,8 @@ class Game {
                 if (this.gameOver) {
                     this.score = 0;
                     this.sound.stop();
-                    for (let i = 0; i < this.peds.cars.length; i++) {
+                    for (let i = 0; i < this.peds.cars.length; i++) 
                         this.scene.remove(this.peds.cars[i]);
-                    };
         
                     for (let i = 0; i < this.peds.cars.length; i++) {
                         this.peds.cars.pop();
@@ -660,15 +630,14 @@ class Game {
                 };
                 this.peds.reset();
                 this.updateCamera();
-            } else if (this.gitText === intersects[0].object) {
+            } else if (this.gitText === intersects[0].object) 
                 window.open("https://github.com/FarzamA/");
-            } else if (this.linkedText === intersects[0].object) {
+            else if (this.linkedText === intersects[0].object) 
                 window.open("https://www.linkedin.com/in/farzamahmad/");
-            } else if (this.angelText === intersects[0].object) {
+            else if (this.angelText === intersects[0].object) 
                 window.open("https://angel.co/u/farzam-ahmad");
-            } else if (this.portfolioText === intersects[0].object) {
+            else if (this.portfolioText === intersects[0].object) 
                 window.open("https://farzama.github.io/");
-            };
         };
 
         this.renderer.render( this.scene, this.camera );
